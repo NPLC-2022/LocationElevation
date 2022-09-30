@@ -47,8 +47,6 @@ class UsingClientProvider : AppCompatActivity() {
 
     private fun listeners(){
 
-//        bind.backWithoutClientButton.setOnClickListener{ finish() }
-
         bind.backWithoutClientButton.setOnClickListener{
             startActivity(Intent(this, MainActivity::class.java)); finish();
         }
