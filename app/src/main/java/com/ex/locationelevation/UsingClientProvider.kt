@@ -26,6 +26,8 @@ class UsingClientProvider : AppCompatActivity() {
     private var requestingLocationUpdatesStatus = true
     private val PermissionID:Int = 100
 
+    private var latnow: Double = 0.0
+    private var lonnow: Double = 0.0
     private val coarseLocationRef = android.Manifest.permission.ACCESS_COARSE_LOCATION
     private val fineLocationRef = android.Manifest.permission.ACCESS_FINE_LOCATION
     private val backgroundLocationRef = android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
@@ -59,7 +61,7 @@ class UsingClientProvider : AppCompatActivity() {
         bind.getLocationWithClientButton.setOnClickListener{
             safetyCheck()
             currentLocationPlease()
-            tellMeWhatFloorImOn(lastLocationPlease())
+            tellMeWhatFloorImOn(lastLocationPlease(), long = lonnow, lati = latnow)
         }
 
 
@@ -73,7 +75,7 @@ class UsingClientProvider : AppCompatActivity() {
         locationBeingCalledBack = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
                 for (location in p0.locations){
-                    tellMeWhatFloorImOn(location.altitude)
+                    tellMeWhatFloorImOn(location.altitude, location.longitude, location.latitude)
                 }
             }
         }
@@ -90,6 +92,9 @@ class UsingClientProvider : AppCompatActivity() {
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             if(location!=null) {
                 messageToReturn = location.altitude
+                lonnow = location.longitude
+                latnow = location.latitude
+
             }
         }
         return messageToReturn
@@ -112,7 +117,7 @@ class UsingClientProvider : AppCompatActivity() {
 
     }
 
-    private fun tellMeWhatFloorImOn(altitudes:Double){
+    private fun tellMeWhatFloorImOn(altitudes:Double, long:Double, lati:Double){
 //        bind.locationDetailTextView.text = "current Altitude: $altitudes"
 
         var safe = true
@@ -133,8 +138,10 @@ class UsingClientProvider : AppCompatActivity() {
             else -> {"Error in Acquiring Location"}
         }
 
-        var finalMessage = "Current Altitude $altitudes \n" +
-                "You're on the $pieceMessage"
+        val finalMessage =
+            "Current Latitude: $lati \n" +
+            "Current Longitude: $long \n" +
+            "Current Altitude $altitudes \n" + "You're on the $pieceMessage"
 
         bind.locationDetailTextView.text = finalMessage
     }
