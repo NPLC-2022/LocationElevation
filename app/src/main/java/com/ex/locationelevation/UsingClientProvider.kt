@@ -26,6 +26,7 @@ class UsingClientProvider : AppCompatActivity() {
     private var requestingLocationUpdatesStatus = true
     private val PermissionID:Int = 100
 
+    private var altnow: Double = 0.0
     private var latnow: Double = 0.0
     private var lonnow: Double = 0.0
     private val coarseLocationRef = android.Manifest.permission.ACCESS_COARSE_LOCATION
@@ -61,7 +62,7 @@ class UsingClientProvider : AppCompatActivity() {
         bind.getLocationWithClientButton.setOnClickListener{
             safetyCheck()
             currentLocationPlease()
-            tellMeWhatFloorImOn(lastLocationPlease(), long = lonnow, lati = latnow)
+            tellMeWhatFloorImOn(alti = altnow, long = lonnow, lati = latnow)
         }
 
 
@@ -87,16 +88,15 @@ class UsingClientProvider : AppCompatActivity() {
     }
 
     @SuppressLint("MissingPermission")
-    private fun lastLocationPlease():Double{
-        var messageToReturn = 9.9
+    private fun lastLocationPlease(){
+
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             if(location!=null) {
-                messageToReturn = location.altitude
+                altnow = location.altitude
                 lonnow = location.longitude
                 latnow = location.latitude
             }
         }
-        return messageToReturn
     }
 
     @SuppressLint("MissingPermission")
@@ -116,13 +116,13 @@ class UsingClientProvider : AppCompatActivity() {
 
     }
 
-    private fun tellMeWhatFloorImOn(altitudes:Double, long:Double, lati:Double){
+    private fun tellMeWhatFloorImOn(alti:Double, long:Double, lati:Double){
 //        bind.locationDetailTextView.text = "current Altitude: $altitudes"
 
         var safe = true
         var theAltitude = 9.99
         try{
-            theAltitude = altitudes
+            theAltitude = alti
         } catch (e:Exception) {
 //            Toast.makeText(this, "Invalid Altitude received", Toast.LENGTH_SHORT).show()
             safe = false
@@ -140,7 +140,7 @@ class UsingClientProvider : AppCompatActivity() {
         val finalMessage =
             "Current Latitude: $lati \n" +
             "Current Longitude: $long \n" +
-            "Current Altitude $altitudes \n" + "You're on the $pieceMessage"
+            "Current Altitude $alti \n" + "You're on the $pieceMessage"
 
         bind.locationDetailTextView.text = finalMessage
     }
@@ -222,7 +222,7 @@ class UsingClientProvider : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if(requestingLocationUpdatesStatus) startCallingBackLocation()
+        if(requestingLocationUpdatesStatus) startCallingBackLocation();
     }
 
     override fun onPause() {
