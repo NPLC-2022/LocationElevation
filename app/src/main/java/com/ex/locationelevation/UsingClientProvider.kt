@@ -87,7 +87,6 @@ class UsingClientProvider : AppCompatActivity() {
 
     @SuppressLint("MissingPermission")
     private fun lastLocationPlease(){
-
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             if(location!=null) {
                 altnow = location.altitude
@@ -115,10 +114,9 @@ class UsingClientProvider : AppCompatActivity() {
     }
 
     private fun tellMeWhatFloorImOn(alti:Double, long:Double, lati:Double){
-//        bind.locationDetailTextView.text = "current Altitude: $altitudes"
 
         var safe = true
-        var theAltitude = 9.99
+        var theAltitude = 0.00
         try{
             theAltitude = alti
         } catch (e:Exception) {
@@ -138,7 +136,8 @@ class UsingClientProvider : AppCompatActivity() {
         val finalMessage =
             "Current Latitude: $lati \n" +
             "Current Longitude: $long \n" +
-            "Current Altitude $alti \n" + "You're on the $pieceMessage"
+            "Current Altitude $alti \n" +
+            "You're on the $pieceMessage"
 
         bind.locationDetailTextView.text = finalMessage
     }
@@ -151,13 +150,17 @@ class UsingClientProvider : AppCompatActivity() {
     }
 
     private fun atUC(theAltitude:Double):String{
-        return if(theAltitude >= 74){ "7th Floor" }
-        else if(theAltitude >= 73) { "6th Floor" }
-        else if (theAltitude >= 72) { "5th Floor" }
-        else if (theAltitude >= 70) { "4th Floor" }
-        else if (theAltitude >= 68) { "3rd Floor" }
-        else if (theAltitude >= 65) { "2nd Floor" }
-        else if (theAltitude >= 55.5) { "1st Floor" }
+        return if(theAltitude > 90) {" Space Elevator, bye see you in Heaven"}
+        else if(theAltitude in 80.0..90.0){ "7th Floor" }
+        else if (theAltitude in 79.61..79.99) { "6-7 Floor" }
+        else if(theAltitude in 77.2..79.6) { "6th Floor" }
+        else if (theAltitude in 76.01..77.19) { "5-6 Floor" }
+        else if (theAltitude in 72.9..76.0) { "5th Floor" }
+        else if (theAltitude in 60.01..72.8) { " 2-4 Floor" }
+//        else if (theAltitude >= 70) { "4th Floor" }
+//        else if (theAltitude >= 68) { "3rd Floor" }
+//        else if (theAltitude >= 65) { "2nd Floor" }
+        else if (theAltitude in 54.0..60.0) { "1st Floor" }
         else { "Underground" }
     }
 
