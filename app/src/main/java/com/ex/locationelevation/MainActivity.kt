@@ -88,12 +88,10 @@ class MainActivity : AppCompatActivity() {
                         else if(Location.altitude >= 54) {message = "1st floor"}
                         else {message = "underground"}
 
-                        bind.locationTextView.setText(
-                            "Your Current Coordinates are:\n " +
-                            "Lat: " + Location.latitude + ";\n " +
-                            "Long: " + Location.longitude + "; Alt: " + Location.altitude + "\n " +
-                            "You're at the " + message
-                        )
+                        bind.locationTextView.text = "Your Current Coordinates are:\n " +
+                                "Lat: " + Location.latitude + ";\n " +
+                                "Long: " + Location.longitude + "; Alt: " + Location.altitude + "\n " +
+                                "You're at the " + message
                     }
                 }
 

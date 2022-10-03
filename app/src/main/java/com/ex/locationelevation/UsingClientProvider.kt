@@ -20,27 +20,22 @@ class UsingClientProvider : AppCompatActivity() {
 
     private lateinit var bind:ActivityUsingClientProviderBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-//    private var fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     private lateinit var locationBeingCalledBack: LocationCallback
     private var REQUESTING_LOCATION_UPDATES_KEY = "locationUpdateKey"
     private var requestingLocationUpdatesStatus = true
     private val PermissionID:Int = 100
 
-    private var altnow: Double = 0.0
-    private var latnow: Double = 0.0
-    private var lonnow: Double = 0.0
-    private val coarseLocationRef = android.Manifest.permission.ACCESS_COARSE_LOCATION
-    private val fineLocationRef = android.Manifest.permission.ACCESS_FINE_LOCATION
-    private val backgroundLocationRef = android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
-    private val granted = PackageManager.PERMISSION_GRANTED
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bind = ActivityUsingClientProviderBinding.inflate(layoutInflater)
         setContentView(bind.root)
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
         bind.AtUCRadioButton.isChecked = true
+
         updateValuesFromBundle(savedInstanceState)
+
         listeners()
 
     }
@@ -48,19 +43,26 @@ class UsingClientProvider : AppCompatActivity() {
     private fun listeners(){
 
         bind.backWithoutClientButton.setOnClickListener{
-            startActivity(Intent(this, MainActivity::class.java)); finish();
+            startActivity(Intent(this, MainActivity::class.java)); finish()
         }
 
         bind.startCallbackFloatingActionButton.setOnClickListener{
-            safetyCheck(); startCallingBackLocation() }
+            safetyCheck(); currentLocationPlease()
+            Toast.makeText(this, "Started Location Tracking", Toast.LENGTH_SHORT).show()
+        }
 
         bind.stopCallbackFloatingActionButton.setOnClickListener{
-            safetyCheck(); stopCallingBackLocation() }
+            safetyCheck(); stopCallingBackLocation()
+            Toast.makeText(this, "Stopped Location Tracking", Toast.LENGTH_SHORT).show()
+        }
 
         bind.getLocationWithClientButton.setOnClickListener{
-            safetyCheck()
-            currentLocationPlease()
-            tellMeWhatFloorImOn(alti = altnow, long = lonnow, lati = latnow)
+            safetyCheck(); currentLocationPlease()
+        }
+
+        bind.experimentalButton.setOnClickListener{
+            startActivity(Intent(this, reimaginedView::class.java))
+            finish()
         }
 
 
@@ -85,20 +87,22 @@ class UsingClientProvider : AppCompatActivity() {
         fusedLocationClient.removeLocationUpdates(locationBeingCalledBack)
     }
 
-    @SuppressLint("MissingPermission")
-    private fun lastLocationPlease(){
-        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-            if(location!=null) {
-                altnow = location.altitude
-                lonnow = location.longitude
-                latnow = location.latitude
-            }
-        }
-    }
+//    @SuppressLint("MissingPermission")
+//    private fun lastLocationPlease(){
+//        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+//            if(location!=null) {
+//                altnow = location.altitude
+//                lonnow = location.longitude
+//                latnow = location.latitude
+//            }
+//        }
+//    }
 
     @SuppressLint("MissingPermission")
     private fun currentLocationPlease(){
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+//        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        startCallingBackLocation()
 
         val locationResquesting = LocationRequest.create()
         locationResquesting.priority = Priority.PRIORITY_HIGH_ACCURACY
@@ -117,8 +121,12 @@ class UsingClientProvider : AppCompatActivity() {
 
         var safe = true
         var theAltitude = 0.00
+        var theLat = 0.00
+        var theLong = 0.00
         try{
             theAltitude = alti
+            theLat = lati
+            theLong = long
         } catch (e:Exception) {
 //            Toast.makeText(this, "Invalid Altitude received", Toast.LENGTH_SHORT).show()
             safe = false
@@ -129,14 +137,14 @@ class UsingClientProvider : AppCompatActivity() {
 
         val pieceMessage = when(getLocationSelection()) {
             "Home" -> atHome(theAltitude)
-            "UCiputra" -> atUC(theAltitude)
+            "UCiputra" -> atUC(theLat, theLong, theAltitude)
             else -> {"Error in Acquiring Location"}
         }
 
         val finalMessage =
-            "Current Latitude: $lati \n" +
-            "Current Longitude: $long \n" +
-            "Current Altitude $alti \n" +
+            "Current Latitude: $theLat \n" +
+            "Current Longitude: $theLong \n" +
+            "Current Altitude: $theAltitude \n" +
             "You're on the $pieceMessage"
 
         bind.locationDetailTextView.text = finalMessage
@@ -149,19 +157,21 @@ class UsingClientProvider : AppCompatActivity() {
         else {"underground"}
     }
 
-    private fun atUC(theAltitude:Double):String{
-        return if(theAltitude > 90) {" Space Elevator, bye see you in Heaven"}
+    private fun atUC(theLat:Double, theLong:Double, theAltitude:Double):String{
+
+        return if(theAltitude > 90.0) {" Space Elevator, bye see you in Heaven"}
         else if(theAltitude in 80.0..90.0){ "7th Floor" }
         else if (theAltitude in 79.61..79.99) { "6-7 Floor" }
         else if(theAltitude in 77.2..79.6) { "6th Floor" }
         else if (theAltitude in 76.01..77.19) { "5-6 Floor" }
         else if (theAltitude in 72.9..76.0) { "5th Floor" }
-        else if (theAltitude in 60.01..72.8) { " 2-4 Floor" }
-//        else if (theAltitude >= 70) { "4th Floor" }
-//        else if (theAltitude >= 68) { "3rd Floor" }
-//        else if (theAltitude >= 65) { "2nd Floor" }
+        else if (theAltitude in 60.01..72.8) { "2-4 Floor" }
         else if (theAltitude in 54.0..60.0) { "1st Floor" }
+        else if(theAltitude in 54.0..60.0 && theLat in -7.2862..-7.2857 && theLong in 112.6319700..112.63225) {"Corepreneur"}
         else { "Underground" }
+
+
+
     }
 
     private fun safetyCheck():Boolean{
@@ -188,16 +198,21 @@ class UsingClientProvider : AppCompatActivity() {
     private fun requestingLocationPermissions(){
         ActivityCompat.requestPermissions(
             this,
-            arrayOf(coarseLocationRef, fineLocationRef, backgroundLocationRef),
+            arrayOf(
+                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_BACKGROUND_LOCATION),
             PermissionID)
     }
 
     private fun checkingLocationPermissions():Boolean{
 
         // this could be turned into a for statement that takes in parameters-ish.
-        if(ActivityCompat.checkSelfPermission(this, coarseLocationRef) == granted
+        if(ActivityCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
             ||
-            ActivityCompat.checkSelfPermission(this, fineLocationRef) == granted
+            ActivityCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
         ){
             return true
         }
@@ -223,7 +238,7 @@ class UsingClientProvider : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if(requestingLocationUpdatesStatus) startCallingBackLocation();
+        if(requestingLocationUpdatesStatus) startCallingBackLocation()
     }
 
     override fun onPause() {

@@ -65,8 +65,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="52dp"
-                android:layout_marginEnd="72dp"
+                android:layout_marginEnd="80dp"
                 android:clickable="true"
+                android:contentDescription="@string/startLocationTracking"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_baseline_play_arrow_24" />
@@ -75,11 +76,10 @@
                 android:id="@+id/stopCallbackFloatingActionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="72dp"
                 android:layout_marginTop="52dp"
-                android:layout_marginEnd="144dp"
                 android:clickable="true"
-                app:layout_constraintEnd_toStartOf="@+id/startCallbackFloatingActionButton"
-                app:layout_constraintHorizontal_bias="0.867"
+                android:contentDescription="@string/stopLocationTracking"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_baseline_stop_24" />
@@ -95,6 +95,16 @@
                 app:layout_constraintHorizontal_bias="0.496"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/stopCallbackFloatingActionButton" />
+
+            <Button
+                android:id="@+id/experimentalButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="60dp"
+                android:text="Exp."
+                app:layout_constraintEnd_toStartOf="@+id/startCallbackFloatingActionButton"
+                app:layout_constraintStart_toEndOf="@+id/stopCallbackFloatingActionButton"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
