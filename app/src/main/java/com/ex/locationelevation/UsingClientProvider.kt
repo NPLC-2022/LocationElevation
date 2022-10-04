@@ -161,7 +161,7 @@ class UsingClientProvider : AppCompatActivity() {
     private fun atUC(theLat:Double, theLong:Double, theAltitude:Double):String{
 
         return if(theAltitude > 90.00) {"Space Elevator, bye see you in Heaven"}
-        else if(theAltitude in 80.00..90.00 && theLat in -7.2859..-7.28538 && theLong in 112.6315..112.6318){ "Dian Auditorium" }
+        else if(theAltitude in 80.00..90.00 && theLat in -7.2859..-7.2853 && theLong in 112.6315..112.63185){ "Dian Auditorium" }
         else if(theAltitude in 80.00..90.00 && theLat in -7.286..-7.2857 && theLong in 112.6314..112.6322){ "Metrodata" }
 //        else if(theAltitude in 80.00..90.00 && theLat in -7.2857..-7.2856 && theLong in 112.6316..112.6318){ "Dian Auditorium" }
         else if(theAltitude in 80.00..90.00){ "7th Floor" }
