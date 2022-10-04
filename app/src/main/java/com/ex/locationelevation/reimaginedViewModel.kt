@@ -35,7 +35,7 @@ class reimaginedViewModel : ViewModel() {
             in 72.90..76.00 -> "5th floor"
             in 60.01..72.80 -> "2 - 4 floor"
             in 54.00..64.00 -> "1st floor"
-            else -> "r y andegrawun?"
+            else -> "r y andegrawun? \nI hef gud inggres"
         }
     }
 

@@ -16,8 +16,14 @@ class DefaultLocationClient(
     private val client: FusedLocationProviderClient,
     ):LocationClient {
 
+    //
+    // Permissions First
+    // Creating Relevant objects
+    // returning it as callbackflor
+
     @SuppressLint("MissingPermission")
     override fun getLocationUpdates(interval: Long): Flow<Location> = callbackFlow {
+
         if(!context.hasLocationPermission()){
             throw LocationClient.LocationException("Missing location permission")
         }
@@ -35,7 +41,6 @@ class DefaultLocationClient(
             .setFastestInterval(interval)
             .setMaxWaitTime(100)
             .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
-
 
         val locationIsCallingBack = object:LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {

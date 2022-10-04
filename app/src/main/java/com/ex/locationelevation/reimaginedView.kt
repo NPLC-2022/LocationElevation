@@ -18,6 +18,8 @@ class reimaginedView:AppCompatActivity() {
         super.onCreate(savedInstanceState)
         bind = ActivityReimaginedBinding.inflate(layoutInflater)
 
+        supportActionBar?.hide()
+
 //        ActivityCompat.requestPermissions(this, arrayOf(
 //            Manifest.permission.ACCESS_COARSE_LOCATION,
 //            Manifest.permission.ACCESS_FINE_LOCATION
@@ -40,13 +42,18 @@ class reimaginedView:AppCompatActivity() {
         }
 
         thisModel.rangeArray.observe(this){
-            bind.currentRangeTextView.text = thisModel.rangeArray.value?.get(0).toString()
+            val topRange = thisModel.rangeArray.value?.get(1).toString()
+            val lowRange = thisModel.rangeArray.value?.get(0).toString()
+            bind.currentRangeTextView.text = "$lowRange - $topRange"
         }
     }
 
     private fun listeners(){
         bind.customAltitudeButton.setOnClickListener{
-            thisModel.theAltitude.value = bind.CustomAltitudeEditTextNumberDecimal.text.toString().toDouble()
+            val newCustomElevation = bind.CustomAltitudeEditTextNumberDecimal.text.toString()
+            if(newCustomElevation.isNotEmpty()){
+                thisModel.theAltitude.value = newCustomElevation.toDouble()
+            }
         }
 
         bind.getLocationButton.setOnClickListener{
