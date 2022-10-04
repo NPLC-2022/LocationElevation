@@ -163,7 +163,7 @@ class UsingClientProvider : AppCompatActivity() {
         return if(theAltitude > 90.00) {"Space Elevator, bye see you in Heaven"}
         else if(theAltitude in 80.00..90.00 && theLat in -7.2857..-7.2856 && theLong in 112.6316..112.6318){ "Dian Auditorium" }
         else if(theAltitude in 80.00..90.00 && theLat in -7.286..-7.2855 && theLong in 112.6311..112.6322){ "Metrodata" }
-
+//        else if(theAltitude in 80.00..90.00 && theLat in -7.2857..-7.2856 && theLong in 112.6316..112.6318){ "Dian Auditorium" }
         else if(theAltitude in 80.00..90.00){ "7th Floor" }
         else if (theAltitude in 79.61..79.99) { "6-7 Floor" }
         else if(theAltitude in 77.20..79.60) { "6th Floor" }
