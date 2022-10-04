@@ -159,15 +159,16 @@ class UsingClientProvider : AppCompatActivity() {
 
     private fun atUC(theLat:Double, theLong:Double, theAltitude:Double):String{
 
-        return if(theAltitude > 90.0) {" Space Elevator, bye see you in Heaven"}
+        return if(theAltitude > 90.0) {"Space Elevator, bye see you in Heaven"}
+        else if(theAltitude in 80.0..90.0 && theLat in -7.286..-7.2855 && theLong in 112.6311..112.6322){ "Metrodata" }
         else if(theAltitude in 80.0..90.0){ "7th Floor" }
         else if (theAltitude in 79.61..79.99) { "6-7 Floor" }
         else if(theAltitude in 77.2..79.6) { "6th Floor" }
         else if (theAltitude in 76.01..77.19) { "5-6 Floor" }
         else if (theAltitude in 72.9..76.0) { "5th Floor" }
         else if (theAltitude in 60.01..72.8) { "2-4 Floor" }
-        else if (theAltitude in 54.0..60.0) { "1st Floor" }
         else if(theAltitude in 54.0..60.0 && theLat in -7.2862..-7.2857 && theLong in 112.6319700..112.63225) {"Corepreneur"}
+        else if (theAltitude in 54.0..60.0) { "1st Floor" }
         else { "Underground" }
 
 
