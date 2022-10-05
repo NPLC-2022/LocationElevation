@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.ex.locationelevation.databinding.ActivityReimaginedBinding
 
 
@@ -20,15 +21,10 @@ class reimaginedView:AppCompatActivity() {
         bind = ActivityReimaginedBinding.inflate(layoutInflater)
 
         supportActionBar?.hide()
-
-//        ActivityCompat.requestPermissions(this, arrayOf(
-//            Manifest.permission.ACCESS_COARSE_LOCATION,
-//            Manifest.permission.ACCESS_FINE_LOCATION
-//        ), 0)
-
         setContentView(bind.root)
 
         thisModel = ViewModelProvider(this)[reimaginedViewModel::class.java]
+        thisModel.checkActivityForLocationPermission(this)
 
         observers()
         listeners()
@@ -36,6 +32,7 @@ class reimaginedView:AppCompatActivity() {
     }
 
     private fun observers(){
+        // When changes are made in the ViewModel, it will automatically show here
         thisModel.theAltitude.observe(this) { bind.textView2.text = it.toString() }
 
         thisModel.messageToDisplay.observe(this){ bind.DisplayFloorTextView.text = it }

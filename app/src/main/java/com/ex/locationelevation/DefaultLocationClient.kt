@@ -30,7 +30,7 @@ class DefaultLocationClient(
         return callbackFlow {
 
 //            if(!context.hasLocationPermission()){
-//                var theException = throw LocationClient.LocationException("Missing location permission")
+//                throw LocationClient.LocationException("Missing location permission")
 //            }
 
             val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager

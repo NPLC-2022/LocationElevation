@@ -1,27 +1,17 @@
 package com.ex.locationelevation
 
-import android.app.Notification
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.location.Location
-import android.media.session.PlaybackState.ACTION_STOP
 import android.os.IBinder
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import androidx.core.app.ServiceCompat.stopForeground
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.NonCancellable.start
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -35,8 +25,6 @@ class LocationService:Service() {
 
     override fun onCreate(){
         super.onCreate()
-//        theModel = ViewModelProvider(applicationContext)[reimaginedViewModel::class.java]
-
         locationClient = DefaultLocationClient(
             applicationContext,
             LocationServices.getFusedLocationProviderClient(applicationContext)
@@ -60,19 +48,9 @@ class LocationService:Service() {
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-//        locationClient.getLocationUpdates(1000L).onEach {
-//            val updatedNotify = notification.setContentText("Altitude " + it.altitude.toString())
-//            notificationManager.notify(1, updatedNotify.build())
-//        }
-
-        locationClient.getLocationUpdates(10000L)
+        locationClient.getLocationUpdates(1000L)
             .catch { e -> e.printStackTrace() }
             .onEach { location ->
-                try{
-                    location.latitude.toString().takeLast(3)
-                }catch (e:Exception){
-                    Toast.makeText(this, "encountered error", Toast.LENGTH_SHORT).show()
-                }
 
                 val lat = location.latitude.toString().takeLast(3)
                 val lon = location.longitude.toString().takeLast(3)
@@ -82,8 +60,6 @@ class LocationService:Service() {
                 notificationManager.notify(1, updatedNotif.build())
             }
             .launchIn(serviceScope)
-
-//        locationClient.returnActiveClient.lastLocation....
 
         startForeground(1, notification.build())
     }
