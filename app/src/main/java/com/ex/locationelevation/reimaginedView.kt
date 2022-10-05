@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ex.locationelevation.databinding.ActivityReimaginedBinding
 
@@ -12,7 +13,7 @@ import com.ex.locationelevation.databinding.ActivityReimaginedBinding
 class reimaginedView:AppCompatActivity() {
 
     private lateinit var bind:ActivityReimaginedBinding
-    private lateinit var thisModel:reimaginedViewModel
+    lateinit var thisModel:reimaginedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,13 +38,11 @@ class reimaginedView:AppCompatActivity() {
     private fun observers(){
         thisModel.theAltitude.observe(this) { bind.textView2.text = it.toString() }
 
-        thisModel.messageToDisplay.observe(this){
-            bind.DisplayFloorTextView.text = thisModel.messageToDisplay.value.toString()
-        }
+        thisModel.messageToDisplay.observe(this){ bind.DisplayFloorTextView.text = it }
 
         thisModel.rangeArray.observe(this){
-            val topRange = thisModel.rangeArray.value?.get(1).toString()
-            val lowRange = thisModel.rangeArray.value?.get(0).toString()
+            val topRange = it[1].toString()
+            val lowRange = it[0].toString()
             bind.currentRangeTextView.text = "$lowRange - $topRange"
         }
     }
@@ -57,21 +56,21 @@ class reimaginedView:AppCompatActivity() {
         }
 
         bind.getLocationButton.setOnClickListener{
-            Intent(this, LocationService::class.java).apply{
+            Intent(applicationContext, LocationService::class.java).apply{
                 action = LocationService.ACTION_START
                 startService(this)
             }
         }
 
         bind.stopGettingLocationButton.setOnClickListener{
-            Intent(this, LocationService::class.java).apply {
+            Intent(applicationContext, LocationService::class.java).apply {
                 action = LocationService.ACTION_STOP
                 startService(this)
             }
         }
 
         bind.returnToClientButton.setOnClickListener{
-            Intent(this, LocationService::class.java).apply {
+            Intent(applicationContext, LocationService::class.java).apply {
                 action = LocationService.ACTION_STOP
                 startService(this)
             }
@@ -79,6 +78,8 @@ class reimaginedView:AppCompatActivity() {
             finish()
         }
     }
+
+
 
 
 
