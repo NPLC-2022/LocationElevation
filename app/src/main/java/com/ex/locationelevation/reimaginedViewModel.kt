@@ -2,19 +2,36 @@ package com.ex.locationelevation
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class reimaginedViewModel : ViewModel() {
 
+    private val _theLatitude: MutableLiveData<Double> by lazy { MutableLiveData<Double>() }
+    val theLatitude = _theLatitude
+
+    private val _theLongitude: MutableLiveData<Double> by lazy { MutableLiveData<Double>() }
+    val theLongitude = _theLongitude
+
     private val _theAltitude: MutableLiveData<Double> by lazy { MutableLiveData<Double>() }
     val theAltitude = _theAltitude
+
+    private val ourLocationClient = LocationService
+
+
+    init {
+        viewModelScope.launch{
+            ourLocationClient.latestLatitude.onEach { theLatitude.value = it }
+            ourLocationClient.latestLongitude.onEach { theLongitude.value = it }
+            ourLocationClient.latestAltitude.onEach { theAltitude.value = it }
+        }
+
+    }
 
     var rangeArray: LiveData<DoubleArray> = Transformations.map(theAltitude) {
         when (it) {
@@ -30,7 +47,6 @@ class reimaginedViewModel : ViewModel() {
         }
     }
 
-
     var messageToDisplay: LiveData<String> = Transformations.map(theAltitude) {
         when (it) {
             in 90.01..100.00 -> "c u in hevannaa"
@@ -44,6 +60,18 @@ class reimaginedViewModel : ViewModel() {
             else -> "r y andegrawun? \nI hef gud inggres"
         }
     }
+
+
+//    val UC_MAP: HashMap<ClosedFloatingPointRange<Double>, DoubleArray> = hashMapOf(
+//        90.01..100.00 to doubleArrayOf(90.01, 200.00),
+//        80.00..90.00 to doubleArrayOf(80.0, 90.0),
+//        79.61..79.99 to doubleArrayOf(79.61, 79.99),
+//        77.20..79.60 to doubleArrayOf(77.2, 79.6),
+//        76.01..77.19 to doubleArrayOf(76.01, 77.19),
+//        72.90..76.00 to doubleArrayOf(72.9, 76.0),
+//        60.01..72.80 to doubleArrayOf(60.01, 72.8),
+//        54.00..64.00 to doubleArrayOf(54.00, 64.00)
+//    )
 
 //    val UC_MAP: HashMap<String, DoubleArray> = hashMapOf(
 //        "space" to doubleArrayOf(90.01, 200.00),
@@ -79,9 +107,10 @@ class reimaginedViewModel : ViewModel() {
 //        "1" to "1st floor"
 //    )
 
+    // reverse this logic
     fun checkActivityForLocationPermission(activity: Activity){
-        if(ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-            && ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if(ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED
+            && ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED){
 
             ActivityCompat.requestPermissions(activity, arrayOf(
                 Manifest.permission.ACCESS_COARSE_LOCATION,

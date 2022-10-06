@@ -33,7 +33,12 @@ class reimaginedView:AppCompatActivity() {
 
     private fun observers(){
         // When changes are made in the ViewModel, it will automatically show here
-        thisModel.theAltitude.observe(this) { bind.textView2.text = it.toString() }
+
+        thisModel.theLatitude.observe(this) { bind.latitudeTextView.text = it.toString() }
+
+        thisModel.theLongitude.observe(this) { bind.longitudeTextView.text = it.toString() }
+
+        thisModel.theAltitude.observe(this) { bind.altitudeTextView.text = it.toString() }
 
         thisModel.messageToDisplay.observe(this){ bind.DisplayFloorTextView.text = it }
 
@@ -64,6 +69,7 @@ class reimaginedView:AppCompatActivity() {
                 action = LocationService.ACTION_STOP
                 startService(this)
             }
+
         }
 
         bind.returnToClientButton.setOnClickListener{
@@ -71,6 +77,7 @@ class reimaginedView:AppCompatActivity() {
                 action = LocationService.ACTION_STOP
                 startService(this)
             }
+
             startActivity(Intent(this, UsingClientProvider::class.java))
             finish()
         }

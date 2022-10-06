@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
@@ -13,6 +14,8 @@ import android.widget.RadioButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.ContextCompat.startActivity
 import com.ex.locationelevation.databinding.ActivityUsingClientProviderBinding
 import com.google.android.gms.location.*
 
@@ -21,8 +24,11 @@ class UsingClientProvider : AppCompatActivity() {
     private lateinit var bind:ActivityUsingClientProviderBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationBeingCalledBack: LocationCallback
+    private lateinit var altToast: Toast
+
     private var REQUESTING_LOCATION_UPDATES_KEY = "locationUpdateKey"
-    private var requestingLocationUpdatesStatus = true
+    // False means I'm not asking atm, True means I am asking for it.
+    private var requestingLocationUpdatesStatus = false
     private val PermissionID:Int = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,17 +54,17 @@ class UsingClientProvider : AppCompatActivity() {
         }
 
         bind.startCallbackFloatingActionButton.setOnClickListener{
-            safetyCheck(); currentLocationPlease()
+            safetyCheck(); currentLocationPlease(); cancelOutAllToasts()
             Toast.makeText(this, "Started Location Tracking", Toast.LENGTH_SHORT).show()
         }
 
         bind.stopCallbackFloatingActionButton.setOnClickListener{
-            safetyCheck(); stopCallingBackLocation()
+            safetyCheck(); removeLocationCallback(); cancelOutAllToasts()
             Toast.makeText(this, "Stopped Location Tracking", Toast.LENGTH_SHORT).show()
         }
 
         bind.getLocationWithClientButton.setOnClickListener{
-            safetyCheck(); currentLocationPlease()
+            safetyCheck(); currentLocationPlease(); cancelOutAllToasts()
         }
 
         bind.experimentalButton.setOnClickListener{
@@ -69,11 +75,44 @@ class UsingClientProvider : AppCompatActivity() {
 
     }
 
+    private fun createShortToastMessage(string:String){
+        altToast = Toast.makeText(this, string, Toast.LENGTH_SHORT)
+    }
+
+    private fun displayToastMessage() = altToast.show()
+
+    private fun cancelOutAllToasts() {
+        if (!::altToast.isInitialized) { return }
+
+        altToast.cancel()
+    }
+
     private fun getLocationSelection():String{
         return findViewById<RadioButton>(bind.locationSelectionRadioGroup.checkedRadioButtonId).text.toString()
     }
 
-    private fun startCallingBackLocation(){
+//    private fun initializeLocationCallback(){
+//        locationBeingCalledBack = object : LocationCallback() {
+//            override fun onLocationResult(p0: LocationResult) {
+//                for (location in p0.locations){
+//                    tellMeWhatFloorImOn(location.altitude, location.longitude, location.latitude)
+//                }
+//            }
+//        }
+//    }
+
+
+    private fun removeLocationCallback(){
+        // to stop the location tracking, we remove the LocationCallback object.
+        fusedLocationClient.removeLocationUpdates(locationBeingCalledBack)
+        requestingLocationUpdatesStatus = false
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun currentLocationPlease(){
+
+        if(requestingLocationUpdatesStatus){return }
+
         locationBeingCalledBack = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
                 for (location in p0.locations){
@@ -81,29 +120,6 @@ class UsingClientProvider : AppCompatActivity() {
                 }
             }
         }
-
-    }
-
-    private fun stopCallingBackLocation(){
-        fusedLocationClient.removeLocationUpdates(locationBeingCalledBack)
-    }
-
-//    @SuppressLint("MissingPermission")
-//    private fun lastLocationPlease(){
-//        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-//            if(location!=null) {
-//                altnow = location.altitude
-//                lonnow = location.longitude
-//                latnow = location.latitude
-//            }
-//        }
-//    }
-
-    @SuppressLint("MissingPermission")
-    private fun currentLocationPlease(){
-//        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-        startCallingBackLocation()
 
         val locationResquesting = LocationRequest.create()
         locationResquesting.priority = Priority.PRIORITY_HIGH_ACCURACY
@@ -116,39 +132,39 @@ class UsingClientProvider : AppCompatActivity() {
             locationBeingCalledBack,
             Looper.getMainLooper() )
 
+        requestingLocationUpdatesStatus = true
     }
 
     private fun tellMeWhatFloorImOn(alti:Double, long:Double, lati:Double){
 
-        var safe = true
-        var theAltitude = 0.00
-        var theLat = 0.00
-        var theLong = 0.00
-        try{
-            theAltitude = alti
-            theLat = lati
-            theLong = long
-        } catch (e:Exception) {
-//            Toast.makeText(this, "Invalid Altitude received", Toast.LENGTH_SHORT).show()
-            safe = false
-        }
-
-        if(!safe){return}
-        Toast.makeText(this, "$theAltitude", Toast.LENGTH_SHORT).show()
+//        if(!safe){return}
+        createShortToastMessage("$alti"); displayToastMessage()
 
         val pieceMessage = when(getLocationSelection()) {
-            "Home" -> atHome(theAltitude)
-            "UCiputra" -> atUC(theLat, theLong, theAltitude)
+            "Home" -> atHome(alti)
+            "UCiputra" -> atUC(lati, long, alti)
             else -> {"Error in Acquiring Location"}
         }
 
+        val activeStatusMessage = when(requestingLocationUpdatesStatus){
+            true -> "Active"; false -> "Disabled"
+        }
+
         val finalMessage =
-            "Current Latitude: $theLat \n" +
-            "Current Longitude: $theLong \n" +
-            "Current Altitude: $theAltitude \n" +
-            "You're on the $pieceMessage"
+                "Latitude: $lati \n" +
+                "Longitude: $long \n" +
+                "Altitude: $alti \n" +
+                "You're on the $pieceMessage"
 
         bind.locationDetailTextView.text = finalMessage
+        bind.locationTrackingStatusTextView.text = activeStatusMessage
+
+//        if(activeStatusMessage=="Disabled"){ //Red
+//            bind.locationTrackingStatusTextView.setTextColor(Color.parseColor("#FF0000"))
+//        } else { //Green
+//            bind.locationTrackingStatusTextView.setTextColor(Color.parseColor("99CC00"))
+//        }
+
     }
 
     private fun atHome(theAltitude: Double):String{
@@ -210,7 +226,6 @@ class UsingClientProvider : AppCompatActivity() {
     }
 
     private fun checkingLocationPermissions():Boolean{
-
         // this could be turned into a for statement that takes in parameters-ish.
         if(ActivityCompat.checkSelfPermission(this,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
@@ -224,9 +239,7 @@ class UsingClientProvider : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
@@ -242,12 +255,12 @@ class UsingClientProvider : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if(requestingLocationUpdatesStatus) startCallingBackLocation()
+        if(requestingLocationUpdatesStatus) currentLocationPlease()
     }
 
     override fun onPause() {
         super.onPause()
-        stopCallingBackLocation()
+        removeLocationCallback()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -263,6 +276,7 @@ class UsingClientProvider : AppCompatActivity() {
             requestingLocationUpdatesStatus = savedInstanceState.getBoolean(
                 REQUESTING_LOCATION_UPDATES_KEY)
         }
+
     }
 
 }
