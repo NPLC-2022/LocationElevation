@@ -2,13 +2,16 @@ package com.ex.locationelevation
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.*
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class reimaginedViewModel : ViewModel() {
 
@@ -21,19 +24,60 @@ class reimaginedViewModel : ViewModel() {
     private val _theAltitude: MutableLiveData<Double> by lazy { MutableLiveData<Double>() }
     val theAltitude = _theAltitude
 
-    private val ourLocationClient = LocationService
+    private val _theAccuracy: MutableLiveData<Float> by lazy { MutableLiveData<Float>() }
+    val theAccuracy = _theAltitude
 
+    fun requestLocationTrackingData() = viewModelScope.launch(SupervisorJob() + Dispatchers.IO) {
 
-    init {
-        viewModelScope.launch{
-            ourLocationClient.latestLatitude.onEach { theLatitude.value = it }
-            ourLocationClient.latestLongitude.onEach { theLongitude.value = it }
-            ourLocationClient.latestAltitude.onEach { theAltitude.value = it }
+//        val receivingLocation: LiveData<Location> = LocationService().shareLocationFlow().asLiveData()
+
+//        val receivingLocation: LiveData<Location> = liveData {
+//            LocationService().shareLocationFlow().collect{ location ->
+//                emitSource(location)
+//            }
+//        }
+
+        val receivingLocation = liveData {
+            LocationService().shareLocationFlow().collect{ emit(it) }
         }
+
+        val justLocation = receivingLocation.value
+
+        withContext(Dispatchers.Default){
+            _theLatitude.value = justLocation?.latitude ?: 0.00
+            _theLongitude.value = justLocation?.longitude ?: 0.00
+            _theAltitude.value = justLocation?.altitude ?: 0.00
+//            _theAccuracy.value = justLocation?.accuracy ?:
+        }
+
+//        LocationService().shareLocationFlow().onEach { location ->
+//            val lati = location.latitude
+//            val long = location.longitude
+//            val alti = location.altitude
+//            val accu = location.accuracy
+//
+//            withContext(Dispatchers.Main){
+//                _theLatitude.value = lati
+//                _theLongitude.value = long
+//                _theAltitude.value = alti
+//                _theAccuracy.value = accu
+//            }
+//        }
 
     }
 
-    var rangeArray: LiveData<DoubleArray> = Transformations.map(theAltitude) {
+//    fun requestLocationTrackingData() {
+//
+//    }
+
+    fun getAltitudeFlow(){
+        viewModelScope.launch(Dispatchers.IO) {
+           _theLatitude.value = LocationService.latestLatitude.asLiveData().value
+
+        }
+    }
+
+    var rangeArray: LiveData<DoubleArray> = Transformations.map(_theAltitude) {
         when (it) {
             in 90.01..100.00 -> doubleArrayOf(90.01, 100.00)
             in 80.00..90.00 -> doubleArrayOf(80.0, 90.0)
@@ -47,7 +91,7 @@ class reimaginedViewModel : ViewModel() {
         }
     }
 
-    var messageToDisplay: LiveData<String> = Transformations.map(theAltitude) {
+    var messageToDisplay: LiveData<String> = Transformations.map(_theAltitude) {
         when (it) {
             in 90.01..100.00 -> "c u in hevannaa"
             in 80.00..90.00 -> "7th floor"
@@ -61,53 +105,6 @@ class reimaginedViewModel : ViewModel() {
         }
     }
 
-
-//    val UC_MAP: HashMap<ClosedFloatingPointRange<Double>, DoubleArray> = hashMapOf(
-//        90.01..100.00 to doubleArrayOf(90.01, 200.00),
-//        80.00..90.00 to doubleArrayOf(80.0, 90.0),
-//        79.61..79.99 to doubleArrayOf(79.61, 79.99),
-//        77.20..79.60 to doubleArrayOf(77.2, 79.6),
-//        76.01..77.19 to doubleArrayOf(76.01, 77.19),
-//        72.90..76.00 to doubleArrayOf(72.9, 76.0),
-//        60.01..72.80 to doubleArrayOf(60.01, 72.8),
-//        54.00..64.00 to doubleArrayOf(54.00, 64.00)
-//    )
-
-//    val UC_MAP: HashMap<String, DoubleArray> = hashMapOf(
-//        "space" to doubleArrayOf(90.01, 200.00),
-//        "7" to doubleArrayOf(80.0, 90.0),
-//        "67" to doubleArrayOf(79.61, 79.99),
-//        "6" to doubleArrayOf(77.2, 79.6),
-//        "56" to doubleArrayOf(76.01, 77.19),
-//        "5" to doubleArrayOf(72.9, 76.0),
-//        "24" to doubleArrayOf(60.01, 72.8),
-//        "1" to doubleArrayOf(54.00, 64.00)
-//    )
-
-//    val UC_MAP: HashMap<String, DoubleArray> = hashMapOf(
-//        "space" to doubleArrayOf(90.01, 200.00),
-//        "7" to doubleArrayOf(80.0, 90.0),
-//        "67" to doubleArrayOf(79.61, 79.99),
-//        "6" to doubleArrayOf(77.2, 79.6),
-//        "56" to doubleArrayOf(76.01, 77.19),
-//        "5" to doubleArrayOf(72.9, 76.0),
-//        "24" to doubleArrayOf(60.01, 72.8),
-//        "1" to doubleArrayOf(54.00, 64.00)
-//    )
-
-//    val MESSAGE_MAP: HashMap<String, String> = hashMapOf(
-//        "space" to "c u in hevannaa",
-//        "under" to "r y andegrawun?",
-//        "7" to "7th floor",
-//        "67" to "6 - 7 floor",
-//        "6" to "6th floor",
-//        "56" to "5 - 6 floor",
-//        "5" to "5th floor",
-//        "24" to "2 - 4 floor",
-//        "1" to "1st floor"
-//    )
-
-    // reverse this logic
     fun checkActivityForLocationPermission(activity: Activity){
         if(ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED
             && ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED){

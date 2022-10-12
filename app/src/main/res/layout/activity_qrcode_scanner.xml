@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".QRCodeScannerActivity">
+
+    <com.budiyev.android.codescanner.CodeScannerView
+        android:id="@+id/QRCodeScannerView"
+        android:layout_width="match_parent"
+        android:layout_height="401dp"
+        app:autoFocusButtonColor="@color/white"
+        app:autoFocusButtonVisible="true"
+        app:flashButtonColor="@color/white"
+        app:flashButtonVisible="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:maskColor="@color/Semiblack" />
+
+    <TextView
+        android:id="@+id/QRCodeResultTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="151dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="152dp"
+        android:text="QR code shows..."
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/QRCodeScannerView" />
+
+    <Button
+        android:id="@+id/returnToGenerateQRButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:text="generate a QR"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/QRCodeResultTextView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

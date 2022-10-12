@@ -58,11 +58,21 @@ class reimaginedView:AppCompatActivity() {
         }
 
         bind.getLocationButton.setOnClickListener{
+//            thisModel.startLocationTracking(this)
             Intent(applicationContext, LocationService::class.java).apply{
                 action = LocationService.ACTION_START
                 startService(this)
             }
         }
+
+        bind.anotherGetLocationButton.setOnClickListener{
+            Intent(applicationContext, LocationService::class.java).apply {
+                action = LocationService.BLAST
+                startService(this)
+            }
+            thisModel.requestLocationTrackingData()
+        }
+
 
         bind.stopGettingLocationButton.setOnClickListener{
             Intent(applicationContext, LocationService::class.java).apply {

@@ -16,15 +16,26 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.lifecycleScope
 import com.ex.locationelevation.databinding.ActivityUsingClientProviderBinding
 import com.google.android.gms.location.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class UsingClientProvider : AppCompatActivity() {
 
     private lateinit var bind:ActivityUsingClientProviderBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var locationBeingCalledBack: LocationCallback
+//    private lateinit var locationBeingCalledBack: LocationCallback
     private lateinit var altToast: Toast
+    private var locationBeingCalledBack = object : LocationCallback() {
+        override fun onLocationResult(p0: LocationResult) {
+            for (location in p0.locations){
+                tellMeWhatFloorImOn(location.altitude, location.longitude, location.latitude)
+            }
+        }
+
+    }
 
     private var REQUESTING_LOCATION_UPDATES_KEY = "locationUpdateKey"
     // False means I'm not asking atm, True means I am asking for it.
@@ -72,6 +83,11 @@ class UsingClientProvider : AppCompatActivity() {
             finish()
         }
 
+        bind.toQRPageActivity.setOnClickListener{
+            startActivity(Intent(this, QRGeneratorActivity::class.java))
+//            finish()
+        }
+
 
     }
 
@@ -104,6 +120,8 @@ class UsingClientProvider : AppCompatActivity() {
 
     private fun removeLocationCallback(){
         // to stop the location tracking, we remove the LocationCallback object.
+//        if(!requestingLocationUpdatesStatus || !::locationBeingCalledBack.isInitialized){return }
+        if(!requestingLocationUpdatesStatus) {return }
         fusedLocationClient.removeLocationUpdates(locationBeingCalledBack)
         requestingLocationUpdatesStatus = false
     }
@@ -113,13 +131,14 @@ class UsingClientProvider : AppCompatActivity() {
 
         if(requestingLocationUpdatesStatus){return }
 
-        locationBeingCalledBack = object : LocationCallback() {
-            override fun onLocationResult(p0: LocationResult) {
-                for (location in p0.locations){
-                    tellMeWhatFloorImOn(location.altitude, location.longitude, location.latitude)
-                }
-            }
-        }
+
+//        locationBeingCalledBack = object : LocationCallback() {
+//            override fun onLocationResult(p0: LocationResult) {
+//                for (location in p0.locations){
+//                    tellMeWhatFloorImOn(location.altitude, location.longitude, location.latitude)
+//                }
+//            }
+//        }
 
         val locationResquesting = LocationRequest.create()
         locationResquesting.priority = Priority.PRIORITY_HIGH_ACCURACY
@@ -159,11 +178,12 @@ class UsingClientProvider : AppCompatActivity() {
         bind.locationDetailTextView.text = finalMessage
         bind.locationTrackingStatusTextView.text = activeStatusMessage
 
-//        if(activeStatusMessage=="Disabled"){ //Red
-//            bind.locationTrackingStatusTextView.setTextColor(Color.parseColor("#FF0000"))
-//        } else { //Green
-//            bind.locationTrackingStatusTextView.setTextColor(Color.parseColor("99CC00"))
-//        }
+        // this might kill your app cause of bad parsing
+        if(activeStatusMessage=="Disabled"){ //Red
+            bind.locationTrackingStatusTextView.setTextColor(Color.parseColor("#FF0000"))
+        } else { //Green
+            bind.locationTrackingStatusTextView.setTextColor(Color.GREEN)
+        }
 
     }
 

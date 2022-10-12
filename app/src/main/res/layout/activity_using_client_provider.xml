@@ -31,12 +31,11 @@
                 android:id="@+id/locationDetailTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
                 android:text="Your Location here"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/backWithoutClientButton" />
+                app:layout_constraintTop_toBottomOf="@+id/toQRPageActivity" />
 
             <RadioGroup
                 android:id="@+id/locationSelectionRadioGroup"
@@ -132,6 +131,17 @@
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="@+id/locationStatusTextView"
                 app:layout_constraintTop_toBottomOf="@+id/locationStatusTextView" />
+
+            <Button
+                android:id="@+id/toQRPageActivity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Generate QR"
+                app:icon="@drawable/ic_baseline_qr_code_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/backWithoutClientButton" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

@@ -22,7 +22,7 @@ class DefaultLocationClient(
     // Creating Relevant objects
     // returning it as callbackflor
 
-    private fun returnActiveClient():FusedLocationProviderClient = client
+//    private fun returnActiveClient():FusedLocationProviderClient = client
 
     @SuppressLint("MissingPermission")
     override fun getLocationUpdates(interval: Long): Flow<Location> {

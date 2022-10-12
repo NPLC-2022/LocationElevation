@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/getAnotherLocationWithClientButton"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".reimaginedView">
@@ -74,7 +75,7 @@
                 android:backgroundTint="@color/teal_200"
                 android:text="Stop"
                 app:layout_constraintEnd_toEndOf="@+id/getLocationButton"
-                app:layout_constraintTop_toBottomOf="@+id/getLocationButton" />
+                app:layout_constraintTop_toBottomOf="@+id/anotherGetLocationButton" />
 
             <Button
                 android:id="@+id/returnToClientButton"
@@ -84,17 +85,29 @@
                 android:backgroundTint="@color/teal_200"
                 android:text="return"
                 app:layout_constraintStart_toStartOf="@+id/getLocationButton"
-                app:layout_constraintTop_toBottomOf="@+id/getLocationButton" />
+                app:layout_constraintTop_toBottomOf="@+id/anotherGetLocationButton" />
 
             <Button
                 android:id="@+id/customAltitudeButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="176dp"
-                android:text="Button"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="140dp"
+                android:text="Test Altitude"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/altitudeTextView" />
+
+            <Button
+                android:id="@+id/anotherGetLocationButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="158dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="159dp"
+                android:text="Get Location"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/getLocationButton" />
 
             <TextView
                 android:id="@+id/altitudeTextView"
