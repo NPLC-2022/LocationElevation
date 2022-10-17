@@ -1,19 +1,14 @@
 package com.ex.locationelevation
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.Toast
-import androidx.appcompat.app.ActionBar
-import androidx.lifecycle.ViewModel
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.lifecycle.ViewModelProvider
 import com.ex.locationelevation.databinding.ActivityQrgeneratorBinding
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.WriterException
-import com.google.zxing.qrcode.QRCodeWriter
+import java.util.*
+import kotlin.concurrent.timerTask
 
 class QRGeneratorActivity : AppCompatActivity() {
 
@@ -28,6 +23,45 @@ class QRGeneratorActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         thisModel = ViewModelProvider(this)[QRGeneratorViewModel::class.java]
+
+        setUpListener()
+
+        thisModel.bitmap.observe(this){
+            bind.qrCodeImageView.setImageBitmap(it)
+        }
+
+
+
+    }
+
+
+
+    fun setUpListener(){
+
+        var theTimer = Timer()
+
+        bind.dataEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                start + after
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                start + before
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+                theTimer.cancel();
+                theTimer = Timer()
+                val setMessageTask = timerTask { thisModel.setMessageToQR(s.toString())}
+
+                if(s.toString().isNotEmpty() && ::thisModel.isInitialized){
+//                    thisModel.generateQRCodeOnImageView(dataForQR, bind.qrCodeImageView)
+//                    thisModel.setMessageToQR(s.toString())
+                    theTimer.schedule(setMessageTask, 500)
+                }
+            }
+        })
 
         bind.generateQRCodeButton.setOnClickListener{
             val dataForQR = bind.dataEditText.text.toString()
@@ -45,6 +79,7 @@ class QRGeneratorActivity : AppCompatActivity() {
             startActivity(Intent(this, QRCodeScannerActivity::class.java))
             finish()
         }
+
 
 
     }

@@ -107,20 +107,7 @@ class UsingClientProvider : AppCompatActivity() {
         return findViewById<RadioButton>(bind.locationSelectionRadioGroup.checkedRadioButtonId).text.toString()
     }
 
-//    private fun initializeLocationCallback(){
-//        locationBeingCalledBack = object : LocationCallback() {
-//            override fun onLocationResult(p0: LocationResult) {
-//                for (location in p0.locations){
-//                    tellMeWhatFloorImOn(location.altitude, location.longitude, location.latitude)
-//                }
-//            }
-//        }
-//    }
-
-
     private fun removeLocationCallback(){
-        // to stop the location tracking, we remove the LocationCallback object.
-//        if(!requestingLocationUpdatesStatus || !::locationBeingCalledBack.isInitialized){return }
         if(!requestingLocationUpdatesStatus) {return }
         fusedLocationClient.removeLocationUpdates(locationBeingCalledBack)
         requestingLocationUpdatesStatus = false
