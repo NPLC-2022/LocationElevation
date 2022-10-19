@@ -12,6 +12,8 @@ import androidx.lifecycle.LiveData
 //import com.ex.locationelevation.LocationService.Companion.lon
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.*
+import kotlinx.coroutines.NonCancellable.start
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 
 
@@ -20,20 +22,19 @@ class LocationService:Service() {
     val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private lateinit var locationClient: LocationClient
 
+//    private val locationClient = DefaultLocationClient(applicationContext, LocationServices.getFusedLocationProviderClient(applicationContext))
+
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate(){
         super.onCreate()
-        locationClient = DefaultLocationClient(
-            applicationContext,
-            LocationServices.getFusedLocationProviderClient(applicationContext)
-        )
+        initializeProvider()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when(intent?.action){
             ACTION_START -> start()
-            BLAST -> shareLocationFlow()
+//            BLAST -> shareLocationFlow()
             ACTION_STOP -> stop()
         }
         return super.onStartCommand(intent, flags, startId)
@@ -82,14 +83,27 @@ class LocationService:Service() {
         serviceScope.cancel()
     }
 
+    fun shareLocationFlow(contextual:Context): Flow<Location> = channelFlow<Location> {
+//        if(!::locationClient.isInitialized){ initializeProvider() }
+//        else
+//            locationClient.getLocationUpdates(1000L).onEach {
+//                launch(Dispatchers.IO) { send(it) }
+//            }
 
-    fun shareLocationFlow(): Flow<Location> = callbackFlow {
-        locationClient.getLocationUpdates(1000L)
-//            .catch { e -> e.printStackTrace() }
-//            .onEach { launch(Dispatchers.IO) { send(it) } }
+//        initializeProvider()
+        DefaultLocationClient(contextual, LocationServices.getFusedLocationProviderClient(contextual))
+        .getLocationUpdates(1000L).onEach {
+            launch(Dispatchers.IO) { send(it) }
+        }
+
     }
     // this function already knows that it's going to do some degree of suspending
 
+    private fun initializeProvider(){
+        locationClient = DefaultLocationClient(
+            applicationContext,
+            LocationServices.getFusedLocationProviderClient(applicationContext))
+    }
 
     companion object{
         const val ACTION_START = "ACTION_START"

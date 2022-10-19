@@ -2,14 +2,19 @@ package com.ex.locationelevation
 
 import android.Manifest
 import android.app.Activity
+import android.app.Application
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.os.IBinder
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.*
+import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -27,57 +32,47 @@ class reimaginedViewModel : ViewModel() {
     private val _theAccuracy: MutableLiveData<Float> by lazy { MutableLiveData<Float>() }
     val theAccuracy = _theAltitude
 
+    // These are the functions that the ReimaginedViewModel will keep
+
+
+    // These are background Functions that will later be moved again
+
+    fun generateLocations(contextual:Context) = viewModelScope.launch(SupervisorJob() + Dispatchers.Default) {
+        LocationService().shareLocationFlow(contextual).collectLatest{ newLocation ->
+//            _theLatitude.value = newLocation.latitude
+//            _theLongitude.value = newLocation.longitude
+//            _theAltitude.value = newLocation.altitude
+//            _theAccuracy.value = newLocation.accuracy
+
+            _theLatitude.postValue(newLocation.latitude)
+            _theLongitude.postValue(newLocation.longitude)
+            _theAltitude.postValue(newLocation.altitude)
+            _theAccuracy.postValue(newLocation.accuracy)
+
+        }
+
+    }
+
     fun requestLocationTrackingData() = viewModelScope.launch(SupervisorJob() + Dispatchers.IO) {
 
-//        val receivingLocation: LiveData<Location> = LocationService().shareLocationFlow().asLiveData()
-
-//        val receivingLocation: LiveData<Location> = liveData {
-//            LocationService().shareLocationFlow().collect{ location ->
-//                emitSource(location)
-//            }
-//        }
-
-        val receivingLocation = liveData {
-            LocationService().shareLocationFlow().collect{ emit(it) }
+        val receivingLocation = channelFlow<Location> {
+//            LocationService().shareLocationFlow().collect{ send(it) }
         }
 
-        val justLocation = receivingLocation.value
+        val justLocation = receivingLocation.asLiveData().value
 
         withContext(Dispatchers.Default){
-            _theLatitude.value = justLocation?.latitude ?: 0.00
-            _theLongitude.value = justLocation?.longitude ?: 0.00
-            _theAltitude.value = justLocation?.altitude ?: 0.00
-//            _theAccuracy.value = justLocation?.accuracy ?:
-        }
+            _theLatitude.postValue(justLocation?.latitude ?: 0.00)
+            _theLongitude.postValue(justLocation?.longitude ?: 0.00)
+            _theAltitude.postValue(justLocation?.altitude ?: 0.00)
 
-//        LocationService().shareLocationFlow().onEach { location ->
-//            val lati = location.latitude
-//            val long = location.longitude
-//            val alti = location.altitude
-//            val accu = location.accuracy
-//
-//            withContext(Dispatchers.Main){
-//                _theLatitude.value = lati
-//                _theLongitude.value = long
-//                _theAltitude.value = alti
-//                _theAccuracy.value = accu
-//            }
-//        }
+        }
 
     }
 
-//    fun requestLocationTrackingData() {
-//
-//    }
 
-    fun getAltitudeFlow(){
-        viewModelScope.launch(Dispatchers.IO) {
-           _theLatitude.value = LocationService.latestLatitude.asLiveData().value
-
-        }
-    }
-
-    var rangeArray: LiveData<DoubleArray> = Transformations.map(_theAltitude) {
+    val rangeArray get() = _rangeArray
+    private var _rangeArray: LiveData<DoubleArray> = Transformations.map(_theAltitude) {
         when (it) {
             in 90.01..100.00 -> doubleArrayOf(90.01, 100.00)
             in 80.00..90.00 -> doubleArrayOf(80.0, 90.0)
@@ -91,7 +86,8 @@ class reimaginedViewModel : ViewModel() {
         }
     }
 
-    var messageToDisplay: LiveData<String> = Transformations.map(_theAltitude) {
+    val messageToDisplay get() = _messageToDisplay
+    private val _messageToDisplay: LiveData<String> = Transformations.map(_theAltitude) {
         when (it) {
             in 90.01..100.00 -> "c u in hevannaa"
             in 80.00..90.00 -> "7th floor"

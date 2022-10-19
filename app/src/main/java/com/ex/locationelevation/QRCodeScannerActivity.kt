@@ -26,14 +26,15 @@ class QRCodeScannerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         bind = ActivityQrcodeScannerBinding.inflate(layoutInflater)
         setContentView(bind.root)
+
         setUpPermission()
-
         model = ViewModelProvider(this)[QRCodeScannerViewModel::class.java]
-
         model.deployCodeScanner(this, bind.QRCodeScannerView)
 
         bind.QRCodeScannerView.setOnClickListener { model.startScannerPreview() }
 //            codeScanner.startPreview()
+
+        model.qrMessage.observe(this){ bind.QRCodeResultTextView.text = it.toString() }
 
     }
 
@@ -48,12 +49,6 @@ class QRCodeScannerActivity : AppCompatActivity() {
 //            codeScanner.releaseResources()
         super.onPause()
     }
-
-//    fun listener(){
-//        backbutton_scanactivity.setOnClickListener{
-//            finish()
-//        }
-//    }
 
     fun setUpPermission(){
         val permission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)

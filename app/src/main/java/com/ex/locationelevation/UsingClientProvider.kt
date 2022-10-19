@@ -72,6 +72,12 @@ class UsingClientProvider : AppCompatActivity() {
         bind.stopCallbackFloatingActionButton.setOnClickListener{
             safetyCheck(); removeLocationCallback(); cancelOutAllToasts()
             Toast.makeText(this, "Stopped Location Tracking", Toast.LENGTH_SHORT).show()
+
+            if(bind.locationTrackingStatusTextView.text.toString()=="Active") { //Green
+                bind.locationTrackingStatusTextView.text = "Disabled"
+                bind.locationTrackingStatusTextView.setTextColor(Color.RED)
+            }
+
         }
 
         bind.getLocationWithClientButton.setOnClickListener{
@@ -167,7 +173,7 @@ class UsingClientProvider : AppCompatActivity() {
 
         // this might kill your app cause of bad parsing
         if(activeStatusMessage=="Disabled"){ //Red
-            bind.locationTrackingStatusTextView.setTextColor(Color.parseColor("#FF0000"))
+            bind.locationTrackingStatusTextView.setTextColor(Color.RED)
         } else { //Green
             bind.locationTrackingStatusTextView.setTextColor(Color.GREEN)
         }

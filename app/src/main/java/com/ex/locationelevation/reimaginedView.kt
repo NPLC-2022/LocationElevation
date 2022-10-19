@@ -8,7 +8,9 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.ex.locationelevation.LocationService.Companion.ACTION_START
 import com.ex.locationelevation.databinding.ActivityReimaginedBinding
+import kotlinx.coroutines.flow.SharingCommand
 
 
 class reimaginedView:AppCompatActivity() {
@@ -67,12 +69,12 @@ class reimaginedView:AppCompatActivity() {
 
         bind.anotherGetLocationButton.setOnClickListener{
             Intent(applicationContext, LocationService::class.java).apply {
-                action = LocationService.BLAST
+                action = LocationService.ACTION_START
                 startService(this)
             }
-            thisModel.requestLocationTrackingData()
+            thisModel.generateLocations(applicationContext)
+//            thisModel.requestLocationTrackingData()q
         }
-
 
         bind.stopGettingLocationButton.setOnClickListener{
             Intent(applicationContext, LocationService::class.java).apply {
