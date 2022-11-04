@@ -8,9 +8,11 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import com.ex.locationelevation.LocationService.Companion.ACTION_START
 import com.ex.locationelevation.databinding.ActivityReimaginedBinding
 import kotlinx.coroutines.flow.SharingCommand
+import kotlinx.coroutines.launch
 
 
 class reimaginedView:AppCompatActivity() {
@@ -51,6 +53,26 @@ class reimaginedView:AppCompatActivity() {
         }
     }
 
+    fun subscribeToLocationServer(){
+        lifecycleScope.launch {
+            LocationService.freshLatitude.observe(this@reimaginedView){
+                bind.latitudeTextView.text = it.toString()
+            }
+            LocationService.freshLongitude.observe(this@reimaginedView){
+                bind.longitudeTextView.text = it.toString()
+            }
+            LocationService.freshAltitude.observe(this@reimaginedView){
+                bind.altitudeTextView.text = it.toString()
+            }
+            LocationService.freshAccuracy.observe(this@reimaginedView){
+                bind.accuracyTextView.text = it.toString()
+            }
+            thisModel.theDummy.observe(this@reimaginedView){
+                bind.dummyTextView.text = it.toString()
+            }
+        }
+    }
+
     private fun listeners(){
         bind.customAltitudeButton.setOnClickListener{
             val newCustomElevation = bind.CustomAltitudeEditTextNumberDecimal.text.toString()
@@ -59,12 +81,17 @@ class reimaginedView:AppCompatActivity() {
             }
         }
 
+        bind.StartDummyFlowButton.setOnClickListener{
+            thisModel.dummyDataFlow()
+        }
+
         bind.getLocationButton.setOnClickListener{
 //            thisModel.startLocationTracking(this)
             Intent(applicationContext, LocationService::class.java).apply{
                 action = LocationService.ACTION_START
                 startService(this)
             }
+            subscribeToLocationServer()
         }
 
         bind.anotherGetLocationButton.setOnClickListener{
@@ -73,7 +100,7 @@ class reimaginedView:AppCompatActivity() {
                 startService(this)
             }
             thisModel.generateLocations(applicationContext)
-//            thisModel.requestLocationTrackingData()q
+//            thisModel.requestLocationTrackingData()
         }
 
         bind.stopGettingLocationButton.setOnClickListener{

@@ -30,11 +30,7 @@ class QRGeneratorActivity : AppCompatActivity() {
             bind.qrCodeImageView.setImageBitmap(it)
         }
 
-
-
     }
-
-
 
     fun setUpListener(){
 

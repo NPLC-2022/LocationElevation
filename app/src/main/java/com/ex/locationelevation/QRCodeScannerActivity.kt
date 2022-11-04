@@ -1,8 +1,10 @@
 package com.ex.locationelevation
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -34,7 +36,15 @@ class QRCodeScannerActivity : AppCompatActivity() {
         bind.QRCodeScannerView.setOnClickListener { model.startScannerPreview() }
 //            codeScanner.startPreview()
 
-        model.qrMessage.observe(this){ bind.QRCodeResultTextView.text = it.toString() }
+        model.qrMessage.observe(this){
+            Log.d("scanner", "Scanner Procuding Text")
+            bind.QRCodeResultTextView.text = it.toString() }
+
+        bind.returnToGenerateQRButton.setOnClickListener{
+            Intent(this, QRGeneratorActivity::class.java).apply {
+                startActivity(this)
+            }
+        }
 
     }
 

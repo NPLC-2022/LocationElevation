@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomeActivity">
+
+    <Button
+        android:id="@+id/goToLocationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="196dp"
+        android:text="Go to Location Activity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/goToScanQRCodeButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="Scan a QR Code"
+        app:layout_constraintStart_toStartOf="@+id/goToGenerateQRButton"
+        app:layout_constraintTop_toBottomOf="@+id/goToGenerateQRButton" />
+
+    <Button
+        android:id="@+id/goToGenerateQRButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="Generate QR Code"
+        app:layout_constraintEnd_toEndOf="@+id/goToLocationButton"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/goToLocationButton"
+        app:layout_constraintTop_toBottomOf="@+id/goToLocationButton" />
+
+    <Button
+        android:id="@+id/goToOxygenCoinDemoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="Oxygen / Coin"
+        app:layout_constraintStart_toStartOf="@+id/goToScanQRCodeButton2"
+        app:layout_constraintTop_toBottomOf="@+id/goToScanQRCodeButton2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

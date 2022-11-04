@@ -1,6 +1,7 @@
 package com.ex.locationelevation
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -22,24 +23,24 @@ class QRCodeScannerViewModel: ViewModel() {
         codeScanner.formats = CodeScanner.ALL_FORMATS // list of type BarcodeFormat,
         // ex. listOf(BarcodeFormat.QR_CODE)
         codeScanner.autoFocusMode = AutoFocusMode.SAFE // or CONTINUOUS
-        codeScanner.scanMode = ScanMode.SINGLE // or CONTINUOUS or PREVIEW
+        codeScanner.scanMode = ScanMode.CONTINUOUS // or CONTINUOUS or PREVIEW
 
         codeScanner.setAutoFocusInterval(2000)
-        codeScanner.scanMode = ScanMode.SINGLE
-        codeScanner.scanMode = ScanMode.CONTINUOUS
-        codeScanner.scanMode = ScanMode.PREVIEW
-
 
         codeScanner.isAutoFocusEnabled = true // Whether to enable auto focus or not
         codeScanner.isFlashEnabled = false // Whether to enable flash or not
 
+        Log.d("scanner viewmodel", "Deployed Scanner")
 
         // Callbacks
         codeScanner.decodeCallback = DecodeCallback {
-            _qrMessage.value = it.toString()
+//            _qrMessage.value = it.toString()
+            _qrMessage.postValue(it.toString())
+//            codeScanner.scanMode = ScanMode.PREVIEW
         }
         codeScanner.errorCallback = ErrorCallback { // or ErrorCallback.SUPPRESS
             _qrMessage.value = "An Error Occured"
+            _qrMessage.postValue("An Error Occured")
         }
 
     }

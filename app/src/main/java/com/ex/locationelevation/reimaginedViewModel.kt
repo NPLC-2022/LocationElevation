@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.IBinder
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.*
@@ -30,46 +31,30 @@ class reimaginedViewModel : ViewModel() {
     val theAltitude = _theAltitude
 
     private val _theAccuracy: MutableLiveData<Float> by lazy { MutableLiveData<Float>() }
-    val theAccuracy = _theAltitude
+    val theAccuracy = _theAccuracy
 
-    // These are the functions that the ReimaginedViewModel will keep
-
-
-    // These are background Functions that will later be moved again
+    private val _dummyData: MutableLiveData<Int> by lazy { MutableLiveData<Int>() }
+    val theDummy get() = _dummyData
 
     fun generateLocations(contextual:Context) = viewModelScope.launch(SupervisorJob() + Dispatchers.Default) {
         LocationService().shareLocationFlow(contextual).collectLatest{ newLocation ->
-//            _theLatitude.value = newLocation.latitude
-//            _theLongitude.value = newLocation.longitude
-//            _theAltitude.value = newLocation.altitude
-//            _theAccuracy.value = newLocation.accuracy
-
             _theLatitude.postValue(newLocation.latitude)
             _theLongitude.postValue(newLocation.longitude)
             _theAltitude.postValue(newLocation.altitude)
             _theAccuracy.postValue(newLocation.accuracy)
 
         }
-
     }
 
-    fun requestLocationTrackingData() = viewModelScope.launch(SupervisorJob() + Dispatchers.IO) {
-
-        val receivingLocation = channelFlow<Location> {
-//            LocationService().shareLocationFlow().collect{ send(it) }
-        }
-
-        val justLocation = receivingLocation.asLiveData().value
-
-        withContext(Dispatchers.Default){
-            _theLatitude.postValue(justLocation?.latitude ?: 0.00)
-            _theLongitude.postValue(justLocation?.longitude ?: 0.00)
-            _theAltitude.postValue(justLocation?.altitude ?: 0.00)
-
-        }
-
+    fun collectLocationFlow() = viewModelScope.launch {
+        _theAltitude.value = LocationService.latestAltitude.asLiveData().value
     }
 
+    fun dummyDataFlow() = viewModelScope.launch(Dispatchers.IO) {
+        LocationService.dummyFlow().collect{
+
+        }
+    }
 
     val rangeArray get() = _rangeArray
     private var _rangeArray: LiveData<DoubleArray> = Transformations.map(_theAltitude) {
@@ -87,6 +72,8 @@ class reimaginedViewModel : ViewModel() {
     }
 
     val messageToDisplay get() = _messageToDisplay
+//    private String word = "something";
+
     private val _messageToDisplay: LiveData<String> = Transformations.map(_theAltitude) {
         when (it) {
             in 90.01..100.00 -> "c u in hevannaa"

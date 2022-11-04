@@ -9,8 +9,12 @@ import android.media.session.PlaybackState.ACTION_STOP
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.liveData
 //import com.ex.locationelevation.LocationService.Companion.lon
 import com.google.android.gms.location.LocationServices
+import com.google.zxing.qrcode.encoder.QRCode
 import kotlinx.coroutines.*
 import kotlinx.coroutines.NonCancellable.start
 import kotlinx.coroutines.channels.awaitClose
@@ -22,7 +26,11 @@ class LocationService:Service() {
     val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private lateinit var locationClient: LocationClient
 
-//    private val locationClient = DefaultLocationClient(applicationContext, LocationServices.getFusedLocationProviderClient(applicationContext))
+    private fun initializeProvider(){
+        locationClient = DefaultLocationClient(
+            applicationContext,
+            LocationServices.getFusedLocationProviderClient(applicationContext))
+    }
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -34,13 +42,13 @@ class LocationService:Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when(intent?.action){
             ACTION_START -> start()
-//            BLAST -> shareLocationFlow()
             ACTION_STOP -> stop()
         }
         return super.onStartCommand(intent, flags, startId)
     }
 
     private fun start(){
+
         val notification = NotificationCompat.Builder(this, "location")
             .setContentTitle("Tracking location...")
             .setContentText("Location: null")
@@ -53,12 +61,10 @@ class LocationService:Service() {
             .catch { e -> e.printStackTrace() }
             .onEach { location ->
 
-//                lat.value = location.latitude.toString().takeLast(3)
-
-                lat = location.latitude
-                lon = location.longitude
-                alt = location.altitude
-//                val acc = location.accuracy
+                _freshLatitude.postValue(location.latitude)
+                _freshLongitude.postValue(location.longitude)
+                _freshAltitude.postValue(location.altitude)
+                _freshAccuracy.postValue(location.accuracy)
 
                 val lati = location.latitude.toString().takeLast(3)
                 val long = location.longitude.toString().takeLast(3)
@@ -84,49 +90,57 @@ class LocationService:Service() {
     }
 
     fun shareLocationFlow(contextual:Context): Flow<Location> = channelFlow<Location> {
-//        if(!::locationClient.isInitialized){ initializeProvider() }
-//        else
-//            locationClient.getLocationUpdates(1000L).onEach {
-//                launch(Dispatchers.IO) { send(it) }
-//            }
 
-//        initializeProvider()
         DefaultLocationClient(contextual, LocationServices.getFusedLocationProviderClient(contextual))
         .getLocationUpdates(1000L).onEach {
             launch(Dispatchers.IO) { send(it) }
         }
-
     }
     // this function already knows that it's going to do some degree of suspending
 
-    private fun initializeProvider(){
-        locationClient = DefaultLocationClient(
-            applicationContext,
-            LocationServices.getFusedLocationProviderClient(applicationContext))
+    fun latestLatitudeFlow(){
+
     }
 
     companion object{
         const val ACTION_START = "ACTION_START"
         const val ACTION_STOP = "ACTION_STOP"
-        const val BLAST = "BLAST"
 //        }
+
+        suspend fun dummyFlow() = flow {
+            var holder = 10
+            while (holder > 0){
+                emit(--holder)
+                delay(1000)
+            }
+        }
 
         var lat = 0.0
         var lon = 0.0
         var alt = 0.0
 
-        val latestLatitude: Flow<Double> = callbackFlow {
-//            launch { send(lat) }
-//            trySend(lat)
-//            emit(lat)
-//            while(true){ emit(lat); delay(1000) }
+        val latestLatitude: Flow<Double> = flow {
+            while(true){ emit(lat); delay(1000) }
         }
         val latestLongitude: Flow<Double> = flow {
             while(true){ emit(lon); delay(1000)}
         }
-        val latestAltitude:Flow<Double> = flow {
+        val latestAltitude:Flow<Double> = flow<Double> {
             while(true){ emit(alt); delay(1000)}
         }
+
+        private val _freshLatitude: MutableLiveData<Double> by lazy { MutableLiveData<Double>() }
+        val freshLatitude get() = _freshLatitude
+
+        private val _freshLongitude: MutableLiveData<Double> by lazy { MutableLiveData<Double>() }
+        val freshLongitude get() = _freshLongitude
+
+        private val _freshAltitude: MutableLiveData<Double> by lazy { MutableLiveData<Double>() }
+        val freshAltitude get() = _freshAltitude
+
+        private val _freshAccuracy: MutableLiveData<Float> by lazy {MutableLiveData<Float>() }
+        val freshAccuracy get() = _freshAccuracy
+
 
     }
 
