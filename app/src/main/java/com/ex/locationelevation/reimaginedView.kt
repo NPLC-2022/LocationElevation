@@ -38,6 +38,8 @@ class reimaginedView:AppCompatActivity() {
     private fun observers(){
         // When changes are made in the ViewModel, it will automatically show here
 
+        thisModel.theDummy.observe(this) { bind.dummyTextView.text = it.toString() }
+
         thisModel.theLatitude.observe(this) { bind.latitudeTextView.text = it.toString() }
 
         thisModel.theLongitude.observe(this) { bind.longitudeTextView.text = it.toString() }
@@ -66,9 +68,6 @@ class reimaginedView:AppCompatActivity() {
             }
             LocationService.freshAccuracy.observe(this@reimaginedView){
                 bind.accuracyTextView.text = it.toString()
-            }
-            thisModel.theDummy.observe(this@reimaginedView){
-                bind.dummyTextView.text = it.toString()
             }
         }
     }

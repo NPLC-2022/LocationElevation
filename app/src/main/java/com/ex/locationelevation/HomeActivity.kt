@@ -14,6 +14,11 @@ class HomeActivity : AppCompatActivity() {
         bind = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(bind.root)
 
+        bind.goToReimaginedButton.setOnClickListener{
+            Intent(this, reimaginedView::class.java)
+                .apply { startActivity(this) }
+        }
+
         bind.goToLocationButton.setOnClickListener{
             Intent(this, UsingClientProvider::class.java)
                 .apply { startActivity(this) }

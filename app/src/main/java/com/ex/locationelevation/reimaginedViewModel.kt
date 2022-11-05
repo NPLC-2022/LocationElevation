@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.IBinder
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -36,24 +37,44 @@ class reimaginedViewModel : ViewModel() {
     private val _dummyData: MutableLiveData<Int> by lazy { MutableLiveData<Int>() }
     val theDummy get() = _dummyData
 
-    fun generateLocations(contextual:Context) = viewModelScope.launch(SupervisorJob() + Dispatchers.Default) {
-        LocationService().shareLocationFlow(contextual).collectLatest{ newLocation ->
-            _theLatitude.postValue(newLocation.latitude)
-            _theLongitude.postValue(newLocation.longitude)
-            _theAltitude.postValue(newLocation.altitude)
-            _theAccuracy.postValue(newLocation.accuracy)
+//    private var _dummyData = MutableLiveData<Int>().apply { this.value = 0 }
+//    val theDummy get() = _dummyData
 
-        }
+//    private lateinit var _dummyData: LiveData<Int>
+//    val theDummy get() = _dummyData
+
+//    private lateinit var _dummyData: LiveData<Int>
+//    val theDummy get() = _dummyData
+
+    fun generateLocations(contextual:Context) = viewModelScope.launch(SupervisorJob() + Dispatchers.Default) {
+//        LocationService().shareLocationFlow(contextual).collectLatest{ newLocation ->
+//            _theLatitude.postValue(newLocation.latitude)
+//            _theLongitude.postValue(newLocation.longitude)
+//            _theAltitude.postValue(newLocation.altitude)
+//            _theAccuracy.postValue(newLocation.accuracy)
+//
+//        }
     }
 
     fun collectLocationFlow() = viewModelScope.launch {
-        _theAltitude.value = LocationService.latestAltitude.asLiveData().value
+
     }
 
     fun dummyDataFlow() = viewModelScope.launch(Dispatchers.IO) {
-        LocationService.dummyFlow().collect{
-
+        LocationService.dummyFlow.collect{
+            Log.d("Grand Dummy", "Collected Dummy $it")
+            _dummyData.postValue(it)
         }
+
+//        _dummyData = LocationService.dummyFlow.asLiveData()
+
+//        liveData<Int> {
+//            LocationService.dummyFlow.collect{
+//                Log.d("Grand Dummy", "Collected Dummy $it")
+//                _dummyData.postValue(it)
+//            }
+//        }
+
     }
 
     val rangeArray get() = _rangeArray

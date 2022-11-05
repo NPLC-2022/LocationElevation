@@ -7,6 +7,7 @@ import android.content.Intent
 import android.location.Location
 import android.media.session.PlaybackState.ACTION_STOP
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -89,13 +90,13 @@ class LocationService:Service() {
         serviceScope.cancel()
     }
 
-    fun shareLocationFlow(contextual:Context): Flow<Location> = channelFlow<Location> {
-
-        DefaultLocationClient(contextual, LocationServices.getFusedLocationProviderClient(contextual))
-        .getLocationUpdates(1000L).onEach {
-            launch(Dispatchers.IO) { send(it) }
-        }
-    }
+//    fun shareLocationFlow(contextual:Context): Flow<Location> = channelFlow<Location> {
+//
+//        DefaultLocationClient(contextual, LocationServices.getFusedLocationProviderClient(contextual))
+//        .getLocationUpdates(1000L).onEach {
+//            launch(Dispatchers.IO) { send(it) }
+//        }
+//    }
     // this function already knows that it's going to do some degree of suspending
 
     fun latestLatitudeFlow(){
@@ -107,11 +108,15 @@ class LocationService:Service() {
         const val ACTION_STOP = "ACTION_STOP"
 //        }
 
-        suspend fun dummyFlow() = flow {
+        val dummyFlow = flow {
             var holder = 10
+            Log.d("dummy", "Dummy Flow Started")
+
             while (holder > 0){
-                emit(--holder)
+                emit(holder--)
+                Log.d("dummy", "Dummy Flow is $holder")
                 delay(1000)
+
             }
         }
 

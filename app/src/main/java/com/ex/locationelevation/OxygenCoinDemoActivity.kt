@@ -19,7 +19,7 @@ class OxygenCoinDemoActivity : AppCompatActivity() {
 
     private lateinit var bind: ActivityOxygenCoinDemoBinding
     private lateinit var oxygenBar: ProgressBar
-    private var currentProgress: Int = 1000
+    private var currentProgress: Int = 1100
     private lateinit var timer: Timer
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +32,7 @@ class OxygenCoinDemoActivity : AppCompatActivity() {
         oxygenBar = bind.OxygenMeterProgressBar
         oxygenBar.max = 1000
         animateChange()
+        Thread.sleep(500)
 
         timer = Timer()
         startLosingOxygen(timer, setTimerTask())
@@ -68,6 +69,7 @@ class OxygenCoinDemoActivity : AppCompatActivity() {
     fun listeners(){
         bind.addOxygenButton.setOnClickListener{
             cancelTimer(); addOxygen(); animateChange()
+            Thread.sleep(1000)
             resumeTimer(); startLosingOxygen(timer, setTimerTask()) }
 
         bind.stopO2Button.setOnClickListener{ cancelTimer(); stopLosingOxygen();  }
