@@ -48,14 +48,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="74dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="36dp"
                 android:layout_marginEnd="75dp"
                 android:text="Floor is displayed here"
                 android:textSize="28sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/customAltitudeButton" />
+                app:layout_constraintTop_toBottomOf="@+id/StartDummyFlowButton" />
 
             <Button
                 android:id="@+id/getLocationButton"
@@ -75,7 +75,7 @@
                 android:backgroundTint="@color/teal_200"
                 android:text="Stop"
                 app:layout_constraintEnd_toEndOf="@+id/getLocationButton"
-                app:layout_constraintTop_toBottomOf="@+id/anotherGetLocationButton" />
+                app:layout_constraintTop_toBottomOf="@+id/getLocationButton" />
 
             <Button
                 android:id="@+id/returnToClientButton"
@@ -85,103 +85,64 @@
                 android:backgroundTint="@color/teal_200"
                 android:text="return"
                 app:layout_constraintStart_toStartOf="@+id/getLocationButton"
-                app:layout_constraintTop_toBottomOf="@+id/anotherGetLocationButton" />
-
-            <Button
-                android:id="@+id/customAltitudeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                android:layout_marginEnd="204dp"
-                android:text="Test Altitude"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/altitudeTextView" />
-
-            <Button
-                android:id="@+id/anotherGetLocationButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="158dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="159dp"
-                android:text="Get Location"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/getLocationButton" />
 
             <Button
                 android:id="@+id/StartDummyFlowButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
                 android:layout_marginTop="12dp"
                 android:text="10 Dummy"
-                app:layout_constraintStart_toEndOf="@+id/customAltitudeButton"
+                app:layout_constraintStart_toStartOf="@+id/dummyTextView"
                 app:layout_constraintTop_toBottomOf="@+id/dummyTextView" />
 
             <TextView
                 android:id="@+id/altitudeTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="56dp"
-                android:layout_marginEnd="100dp"
+                android:layout_marginTop="20dp"
                 android:text="altitude"
-                app:layout_constraintEnd_toStartOf="@+id/accuracyTextView"
-                app:layout_constraintTop_toBottomOf="@+id/CustomAltitudeEditTextNumberDecimal" />
-
-            <EditText
-                android:id="@+id/CustomAltitudeEditTextNumberDecimal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:ems="10"
-                android:inputType="numberDecimal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="@+id/longitudeTextView"
+                app:layout_constraintTop_toBottomOf="@+id/longitudeTextView" />
 
             <TextView
                 android:id="@+id/longitudeTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="12dp"
                 android:text="longitude"
-                app:layout_constraintEnd_toStartOf="@+id/altitudeTextView"
-                app:layout_constraintHorizontal_bias="0.066"
-                app:layout_constraintStart_toEndOf="@+id/latitudeTextView"
-                app:layout_constraintTop_toBottomOf="@+id/CustomAltitudeEditTextNumberDecimal" />
+                app:layout_constraintStart_toStartOf="@+id/latitudeTextView"
+                app:layout_constraintTop_toBottomOf="@+id/latitudeTextView" />
 
             <TextView
                 android:id="@+id/latitudeTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="36dp"
                 android:text="latitude"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/CustomAltitudeEditTextNumberDecimal" />
-
-            <TextView
-                android:id="@+id/accuracyTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="40dp"
-                android:text="Accuracy"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/CustomAltitudeEditTextNumberDecimal" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/dummyTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="72dp"
+                android:layout_marginTop="32dp"
                 android:text="Dummy Here"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.163"
+                app:layout_constraintHorizontal_bias="0.516"
                 app:layout_constraintStart_toEndOf="@+id/altitudeTextView"
-                app:layout_constraintTop_toBottomOf="@+id/CustomAltitudeEditTextNumberDecimal" />
+                app:layout_constraintTop_toBottomOf="@+id/accuracyTextView" />
+
+            <TextView
+                android:id="@+id/accuracyTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="144dp"
+                android:text="Accuracy"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/latitudeTextView" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

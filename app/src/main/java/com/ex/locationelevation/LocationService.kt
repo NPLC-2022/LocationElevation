@@ -62,10 +62,10 @@ class LocationService:Service() {
             .catch { e -> e.printStackTrace() }
             .onEach { location ->
 
-                _freshLatitude.postValue(location.latitude)
-                _freshLongitude.postValue(location.longitude)
-                _freshAltitude.postValue(location.altitude)
-                _freshAccuracy.postValue(location.accuracy)
+                lat = location.latitude
+                lon = location.longitude
+                alt = location.altitude
+                acc = location.accuracy
 
                 val lati = location.latitude.toString().takeLast(3)
                 val long = location.longitude.toString().takeLast(3)
@@ -90,19 +90,6 @@ class LocationService:Service() {
         serviceScope.cancel()
     }
 
-//    fun shareLocationFlow(contextual:Context): Flow<Location> = channelFlow<Location> {
-//
-//        DefaultLocationClient(contextual, LocationServices.getFusedLocationProviderClient(contextual))
-//        .getLocationUpdates(1000L).onEach {
-//            launch(Dispatchers.IO) { send(it) }
-//        }
-//    }
-    // this function already knows that it's going to do some degree of suspending
-
-    fun latestLatitudeFlow(){
-
-    }
-
     companion object{
         const val ACTION_START = "ACTION_START"
         const val ACTION_STOP = "ACTION_STOP"
@@ -116,35 +103,48 @@ class LocationService:Service() {
                 emit(holder--)
                 Log.d("dummy", "Dummy Flow is $holder")
                 delay(1000)
-
             }
         }
 
-        var lat = 0.0
-        var lon = 0.0
-        var alt = 0.0
+        private var lat = 0.0
+        private var lon = 0.0
+        private var alt = 0.0
+        private var acc = 0F
 
-        val latestLatitude: Flow<Double> = flow {
-            while(true){ emit(lat); delay(1000) }
+//        var FlowKey = true
+
+        val latestLatitude: Flow<Double> = flow<Double> {
+            Log.d("Location_Latitude", "Latitude Flow Started")
+            while(true){
+                emit(lat); delay(1000)
+                Log.d("Location_Latitude", "Latitude: $lat \n Thread: ${Thread.currentThread().name}")
+            }
         }
-        val latestLongitude: Flow<Double> = flow {
-            while(true){ emit(lon); delay(1000)}
+
+        val latestLongitude: Flow<Double> = flow<Double> {
+            Log.d("Location_Longitude", "Longitude Flow Started")
+            while(true){
+                emit(lon); delay(1000)
+                Log.d("Location_Longitude", "Longitude: $lon \n" +
+                        " Thread: ${Thread.currentThread().name}")
+            }
         }
-        val latestAltitude:Flow<Double> = flow<Double> {
-            while(true){ emit(alt); delay(1000)}
+
+        val latestAltitude:Flow<Double> = flow {
+            Log.d("Location_Altitude", "Altitude Flow Started")
+            while(true){
+                emit(alt); delay(1000)
+                Log.d("Location_Altitude", "Altitude: $alt \n" +
+                        " Thread: ${Thread.currentThread().name}")
+            }
         }
-
-        private val _freshLatitude: MutableLiveData<Double> by lazy { MutableLiveData<Double>() }
-        val freshLatitude get() = _freshLatitude
-
-        private val _freshLongitude: MutableLiveData<Double> by lazy { MutableLiveData<Double>() }
-        val freshLongitude get() = _freshLongitude
-
-        private val _freshAltitude: MutableLiveData<Double> by lazy { MutableLiveData<Double>() }
-        val freshAltitude get() = _freshAltitude
-
-        private val _freshAccuracy: MutableLiveData<Float> by lazy {MutableLiveData<Float>() }
-        val freshAccuracy get() = _freshAccuracy
+        val latestAccuracy: Flow<Float> = flow {
+            while(true){
+                emit(acc); delay(1000)
+                Log.d("Location_Accuracy", "Accuracy: $acc \n" +
+                        " Thread: ${Thread.currentThread().name}")
+            }
+        }
 
 
     }

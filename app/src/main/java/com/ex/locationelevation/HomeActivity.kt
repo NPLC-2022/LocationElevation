@@ -39,6 +39,10 @@ class HomeActivity : AppCompatActivity() {
                 .apply { startActivity(this) }
         }
 
+        bind.goToSwitchesAndCrystalsButton.setOnClickListener{
+            Intent(this, SwitchesAndCrystalsActivity::class.java)
+                .apply { startActivity(this) }
+        }
 
 
     }

@@ -1,4 +1,4 @@
-package model
+package com.ex.locationelevation.model
 
 /*
     name - Well, the name of the floor - 5th or 6th or 7th

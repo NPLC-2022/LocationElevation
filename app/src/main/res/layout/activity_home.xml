@@ -6,54 +6,73 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
-    <Button
-        android:id="@+id/goToLocationButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Go to Location Activity"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/goToReimaginedButton"
-        app:layout_constraintTop_toBottomOf="@+id/goToReimaginedButton" />
-
-    <Button
-        android:id="@+id/goToScanQRCodeButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="Scan a QR Code"
-        app:layout_constraintStart_toStartOf="@+id/goToGenerateQRButton"
-        app:layout_constraintTop_toBottomOf="@+id/goToGenerateQRButton" />
-
-    <Button
-        android:id="@+id/goToGenerateQRButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="Generate QR Code"
-        app:layout_constraintEnd_toEndOf="@+id/goToLocationButton"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/goToLocationButton"
-        app:layout_constraintTop_toBottomOf="@+id/goToLocationButton" />
-
-    <Button
-        android:id="@+id/goToOxygenCoinDemoButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="Oxygen / Coin"
-        app:layout_constraintStart_toStartOf="@+id/goToScanQRCodeButton2"
-        app:layout_constraintTop_toBottomOf="@+id/goToScanQRCodeButton2" />
-
-    <Button
-        android:id="@+id/goToReimaginedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="88dp"
-        android:layout_marginTop="124dp"
-        android:text="Reimagined"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/goToReimaginedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="72dp"
+                android:layout_marginTop="72dp"
+                android:text="Reimagined"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/goToSwitchesAndCrystalsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Switches and Crystals"
+                app:layout_constraintStart_toStartOf="@+id/goToOxygenCoinDemoButton"
+                app:layout_constraintTop_toBottomOf="@+id/goToOxygenCoinDemoButton" />
+
+            <Button
+                android:id="@+id/goToLocationButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Go to Location Activity"
+                app:layout_constraintStart_toStartOf="@+id/goToReimaginedButton"
+                app:layout_constraintTop_toBottomOf="@+id/goToReimaginedButton" />
+
+            <Button
+                android:id="@+id/goToGenerateQRButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Generate QR Code"
+                app:layout_constraintStart_toStartOf="@+id/goToLocationButton"
+                app:layout_constraintTop_toBottomOf="@+id/goToLocationButton" />
+
+            <Button
+                android:id="@+id/goToOxygenCoinDemoButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Oxygen / Coin"
+                app:layout_constraintStart_toStartOf="@+id/goToScanQRCodeButton2"
+                app:layout_constraintTop_toBottomOf="@+id/goToScanQRCodeButton2" />
+
+            <Button
+                android:id="@+id/goToScanQRCodeButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Scan a QR Code"
+                app:layout_constraintStart_toStartOf="@+id/goToGenerateQRButton"
+                app:layout_constraintTop_toBottomOf="@+id/goToGenerateQRButton" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

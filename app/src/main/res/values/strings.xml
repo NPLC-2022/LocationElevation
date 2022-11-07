@@ -3,4 +3,6 @@
     <string name="title_activity_reimaginedcomposed">reimaginedcomposed</string>
     <string name="startLocationTracking">start location tracking</string>
     <string name="stopLocationTracking">stop location tracking</string>
+    <string name="switch_literally">switch</string>
+
 </resources>

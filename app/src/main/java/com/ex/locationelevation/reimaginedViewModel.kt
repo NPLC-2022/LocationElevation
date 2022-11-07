@@ -2,23 +2,14 @@ package com.ex.locationelevation
 
 import android.Manifest
 import android.app.Activity
-import android.app.Application
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Location
-import android.os.IBinder
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.*
-import com.google.android.gms.location.LocationServices
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class reimaginedViewModel : ViewModel() {
 
@@ -34,48 +25,110 @@ class reimaginedViewModel : ViewModel() {
     private val _theAccuracy: MutableLiveData<Float> by lazy { MutableLiveData<Float>() }
     val theAccuracy = _theAccuracy
 
-    private val _dummyData: MutableLiveData<Int> by lazy { MutableLiveData<Int>() }
-    val theDummy get() = _dummyData
 
-//    private var _dummyData = MutableLiveData<Int>().apply { this.value = 0 }
-//    val theDummy get() = _dummyData
+// ===============================================================================================
+// Jobs, Flows and Scopes
 
-//    private lateinit var _dummyData: LiveData<Int>
-//    val theDummy get() = _dummyData
+    private val _dummyDataState: MutableStateFlow<Int> by lazy { MutableStateFlow(0) }
+    val theDummyState get() = _dummyDataState.asStateFlow()
 
-//    private lateinit var _dummyData: LiveData<Int>
-//    val theDummy get() = _dummyData
-
-    fun generateLocations(contextual:Context) = viewModelScope.launch(SupervisorJob() + Dispatchers.Default) {
-//        LocationService().shareLocationFlow(contextual).collectLatest{ newLocation ->
-//            _theLatitude.postValue(newLocation.latitude)
-//            _theLongitude.postValue(newLocation.longitude)
-//            _theAltitude.postValue(newLocation.altitude)
-//            _theAccuracy.postValue(newLocation.accuracy)
-//
-//        }
-    }
-
-    fun collectLocationFlow() = viewModelScope.launch {
-
-    }
-
-    fun dummyDataFlow() = viewModelScope.launch(Dispatchers.IO) {
-        LocationService.dummyFlow.collect{
-            Log.d("Grand Dummy", "Collected Dummy $it")
-            _dummyData.postValue(it)
+    private val _dummyJob = LocationService.dummyFlow.cancellable()
+    fun dummyDataStateFlow() = viewModelScope.launch(Dispatchers.IO) {
+        _dummyJob.conflate().collect{
+            Log.d("StateFlow Grand Dummy", "Collected Dummy is $it")
+            _dummyDataState.value = it
         }
+    }
 
-//        _dummyData = LocationService.dummyFlow.asLiveData()
+    private lateinit var _latitudeFlow: Flow<Double>
+    private lateinit var _latitudeJob: Job
+    private suspend fun collectLatitudeJob() {
+        _latitudeFlow = LocationService.latestLatitude.cancellable().conflate()
+        _latitudeFlow.collectLatest{ _theLatitude.postValue(it) }
+    }
 
-//        liveData<Int> {
-//            LocationService.dummyFlow.collect{
-//                Log.d("Grand Dummy", "Collected Dummy $it")
-//                _dummyData.postValue(it)
-//            }
-//        }
+    fun startLatitudeFlow() {
+        _latitudeJob = viewModelScope.launch(Dispatchers.IO) { collectLatitudeJob() }
+        _latitudeJob.start()
+            .apply { Log.d("LATITUDE_FLOW_STARTED", "Latitude Flow is starting") }
+    }
+    fun cancelLatitudeFlow() {
+        if(!::_latitudeJob.isInitialized) {
+            Log.d("LATITUDE_FLOW_FAILED", "Latitude failed to STOP")
+            return
+        }
+        _latitudeJob.cancel()
+            .apply { Log.d("LATITUDE_FLOW_STOPPED", "Latitude Flow is canceled") }
+    }
+
+    private lateinit var _longitudeFlow: Flow<Double>
+    private lateinit var _longitudeJob: Job
+    private suspend fun collectLongitudeJob() {
+        _longitudeFlow = LocationService.latestLongitude.cancellable().conflate()
+        _longitudeFlow.collectLatest{ _theLongitude.postValue(it) }
+    }
+
+    fun startLongitudeFlow() {
+        _longitudeJob = viewModelScope.launch(Dispatchers.IO) { collectLongitudeJob() }
+        _longitudeJob.start()
+            .apply { Log.d("LONGITUDE_FLOW_STARTED", "Longitude Flow is starting") }
+    }
+    fun cancelLongitudeFlow() {
+        if(!::_longitudeJob.isInitialized) {
+            Log.d("LONGITUDE_FLOW_FAILED", "Longitude failed to STOP")
+            return
+        }
+        _longitudeJob.cancel()
+            .apply { Log.d("LONGITUDE_FLOW_STOPPED", "Longitude Flow is canceled") }
+    }
+
+    private lateinit var _altitudeFlow: Flow<Double>
+    private lateinit var _altitudeJob: Job
+    private suspend fun collectAltitudeJob() {
+        _altitudeFlow = LocationService.latestAltitude.cancellable().conflate()
+        _altitudeFlow.collectLatest{ _theAltitude.postValue(it) }
 
     }
+
+    fun startAltitudeFlow() {
+        _altitudeJob = viewModelScope.launch(Dispatchers.IO) { collectAltitudeJob() }
+        _altitudeJob.start()
+            .apply { Log.d("ALTITUDE_FLOW_STARTED", "Altitude Flow is starting") }
+    }
+    fun cancelAltitudeFlow() {
+        if(!::_altitudeJob.isInitialized) {
+            Log.d("ALTITUDE_FLOW_FAILED", "Altitude failed to STOP")
+            return
+        }
+        _altitudeJob.cancel()
+        .apply { Log.d("ALTITUDE_FLOW_STOPPED", "Altitude Flow is canceled") }
+    }
+
+    private lateinit var _accuracyFlow: Flow<Float>
+    private lateinit var _accuracyJob: Job
+    private suspend fun collectAccuracyJob() {
+        _accuracyFlow = LocationService.latestAccuracy.cancellable().conflate()
+        _accuracyFlow.collectLatest{ _theAccuracy.postValue(it) }
+
+    }
+
+    fun startAccuracyFlow() {
+        _accuracyJob = viewModelScope.launch(Dispatchers.IO) { collectAccuracyJob() }
+        _accuracyJob.start()
+            .apply { Log.d("ACCURACY_FLOW_STARTED", "Accuracy Flow is starting") }
+    }
+    fun cancelAccuracyFlow() {
+        if(!::_accuracyJob.isInitialized) {
+            Log.d("ACCURACY_FLOW_FAILED", "Accuracy failed to STOP")
+            return
+        }
+        _accuracyJob.cancel()
+            .apply { Log.d("ACCURACY_FLOW_STOPPED", "Accuracy Flow is canceled") }
+    }
+
+
+// ===============================================================================================
+// Data
 
     val rangeArray get() = _rangeArray
     private var _rangeArray: LiveData<DoubleArray> = Transformations.map(_theAltitude) {
@@ -93,8 +146,6 @@ class reimaginedViewModel : ViewModel() {
     }
 
     val messageToDisplay get() = _messageToDisplay
-//    private String word = "something";
-
     private val _messageToDisplay: LiveData<String> = Transformations.map(_theAltitude) {
         when (it) {
             in 90.01..100.00 -> "c u in hevannaa"

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/upperConstraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SwitchesAndCrystalsActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Button
+                android:id="@+id/switchTwoButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/switch_literally"
+                android:textSize="12sp"
+                app:icon="@drawable/ic_baseline_flash_on_24"
+                app:layout_constraintEnd_toStartOf="@+id/switchThreeButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/switchOneButton"
+                app:layout_constraintTop_toTopOf="@+id/switchOneButton" />
+
+            <Button
+                android:id="@+id/switchOneButton"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:backgroundTint="#4CAF50"
+                android:text="@string/switch_literally"
+                android:textSize="12sp"
+                app:icon="@drawable/ic_baseline_flash_on_24"
+                app:layout_constraintEnd_toStartOf="@+id/switchTwoButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/resetCrystalButton" />
+
+            <Button
+                android:id="@+id/switchThreeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="#2196F3"
+                android:text="@string/switch_literally"
+                android:textSize="12sp"
+                app:icon="@drawable/ic_baseline_flash_on_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/switchTwoButton"
+                app:layout_constraintTop_toTopOf="@+id/switchTwoButton" />
+
+            <Button
+                android:id="@+id/crystalOneButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="140dp"
+                android:text="1"
+                app:layout_constraintEnd_toStartOf="@+id/crystalTwoButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/crystalFiveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/crystalFourButton"
+                app:layout_constraintTop_toTopOf="@+id/crystalFourButton" />
+
+            <Button
+                android:id="@+id/crystalFourButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:text="4"
+                app:layout_constraintEnd_toStartOf="@+id/crystalFiveButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/crystalOneButton" />
+
+            <Button
+                android:id="@+id/crystalThreeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/crystalTwoButton"
+                app:layout_constraintTop_toTopOf="@+id/crystalTwoButton" />
+
+            <Button
+                android:id="@+id/crystalTwoButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2"
+                app:layout_constraintEnd_toStartOf="@+id/crystalThreeButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/crystalOneButton"
+                app:layout_constraintTop_toTopOf="@+id/crystalOneButton" />
+
+            <TextView
+                android:id="@+id/greenSwitchTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:text="Toggle 1 and 3"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/switchOneButton"
+                app:layout_constraintTop_toBottomOf="@+id/switchOneButton" />
+
+            <TextView
+                android:id="@+id/purpleSwitchTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:text="Toggle 2 and 4"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/switchTwoButton"
+                app:layout_constraintTop_toBottomOf="@+id/switchTwoButton" />
+
+            <TextView
+                android:id="@+id/blueSwitchTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:text="Toggle 4 and 5"
+                app:layout_constraintStart_toStartOf="@+id/switchThreeButton"
+                app:layout_constraintTop_toBottomOf="@+id/switchThreeButton" />
+
+            <TextView
+                android:id="@+id/CyrstalTitleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="56dp"
+                android:text="Crystal and Switches"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/resetCrystalButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="80dp"
+                android:layout_marginTop="68dp"
+                android:text="Reset"
+                android:backgroundTint="@color/red_500"
+                app:layout_constraintStart_toStartOf="@+id/crystalFourButton"
+                app:layout_constraintTop_toBottomOf="@+id/crystalFiveButton" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

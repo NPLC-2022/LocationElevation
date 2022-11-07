@@ -1,6 +1,6 @@
-package database
+package com.ex.locationelevation.database
 
-import model.floorData
+import com.ex.locationelevation.model.floorData
 
 class GlobalVar {
 
