@@ -31,7 +31,12 @@ class UsingClientProvider : AppCompatActivity() {
     private var locationBeingCalledBack = object : LocationCallback() {
         override fun onLocationResult(p0: LocationResult) {
             for (location in p0.locations){
-                tellMeWhatFloorImOn(location.altitude, location.longitude, location.latitude)
+                tellMeWhatFloorImOn(
+                    location.altitude,
+                    location.verticalAccuracyMeters.toDouble(),
+                    location.longitude,
+                    location.latitude,
+                    location.accuracy.toDouble())
             }
         }
 
@@ -147,7 +152,7 @@ class UsingClientProvider : AppCompatActivity() {
         requestingLocationUpdatesStatus = true
     }
 
-    private fun tellMeWhatFloorImOn(alti:Double, long:Double, lati:Double){
+    private fun tellMeWhatFloorImOn(alti:Double, altcc:Double, long:Double, lati:Double, acc:Double){
 
 //        if(!safe){return}
         createShortToastMessage("$alti"); displayToastMessage()
@@ -165,7 +170,9 @@ class UsingClientProvider : AppCompatActivity() {
         val finalMessage =
                 "Latitude: $lati \n" +
                 "Longitude: $long \n" +
+                "Accuracy: $acc \n" +
                 "Altitude: $alti \n" +
+                "Alt-Acc: $altcc \n" +
                 "You're on the $pieceMessage"
 
         bind.locationDetailTextView.text = finalMessage

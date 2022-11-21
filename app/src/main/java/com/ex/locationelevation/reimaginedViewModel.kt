@@ -146,18 +146,36 @@ class reimaginedViewModel : ViewModel() {
     }
 
     val messageToDisplay get() = _messageToDisplay
+
     private val _messageToDisplay: LiveData<String> = Transformations.map(_theAltitude) {
-        when (it) {
-            in 90.01..100.00 -> "c u in hevannaa"
-            in 80.00..90.00 -> "7th floor"
-            in 79.61..79.99 -> "6 - 7 floor"
-            in 77.20..79.60 -> "6th floor"
-            in 76.01..77.19 -> "5 - 6 floor"
-            in 72.90..76.00 -> "5th floor"
-            in 60.01..72.80 -> "2 - 4 floor"
-            in 54.00..64.00 -> "1st floor"
-            else -> "r y andegrawun? \nI hef gud inggres"
-        }
+
+//        if (theLatitude.value != null && theLongitude.value != null) {
+//        var certainLatitude = theLatitude.value!!.let { it }
+//        val certainLongitude = theLongitude.value!!.let { it }
+            when (it) {
+                in 90.01..100.00 -> "c u in hevannaa"
+                in 80.00..90.00 ->
+                    if(theLatitude.value != null && theLongitude.value != null) {
+                          if (theLatitude.value.toString().toDouble() in -7.2859..-7.2853 &&
+                              theLongitude.value.toString().toDouble() in 112.6315..112.63185) {"Dian Auditorium"}
+                        else if(theLatitude.value.toString().toDouble() in -7.286..-7.2857 &&
+                              theLongitude.value.toString().toDouble() in 112.6314..112.6322) {"Metrodata"}
+                        else "7th floor"
+                        } else { "7thFloor" }
+                in 79.61..79.99 -> "6 - 7 floor"
+                in 77.20..79.60 -> "6th floor"
+                in 76.01..77.19 -> "5 - 6 floor"
+                in 72.90..76.00 -> "5th floor"
+                in 60.01..72.80 -> "2 - 4 floor"
+                in 54.00..64.00 ->
+                    if(theLatitude.value != null && theLongitude.value != null) {
+                        if (theLatitude.value.toString().toDouble() in -7.2862..-7.2857 &&
+                            theLongitude.value.toString().toDouble() in 112.6319..112.6322) {"Corepreneur"}
+                        else "1st floor"
+                    } else { "1stFloor" }
+                else -> "r y andegrawun? \nI hef gud inggres"
+            }
+//        }
     }
 
     fun checkActivityForLocationPermission(activity: Activity){
