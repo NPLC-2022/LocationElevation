@@ -24,6 +24,15 @@
         android:theme="@style/Theme.LocationElevation"
         tools:targetApi="31">
         <activity
+            android:name=".BarometerActivity"
+            android:exported="false"
+            android:label="@string/title_activity_barometer"
+            android:theme="@style/Theme.LocationElevation.NoActionBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".SwitchesAndCrystalsActivity"
             android:exported="false">
             <meta-data

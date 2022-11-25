@@ -6,9 +6,11 @@ import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.media.session.PlaybackState.ACTION_STOP
+import android.os.Build
 import android.os.Build.VERSION_CODES.R
 import android.os.IBinder
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -41,6 +43,7 @@ class LocationService:Service() {
         initializeProvider()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when(intent?.action){
             ACTION_START -> start()
@@ -49,12 +52,13 @@ class LocationService:Service() {
         return super.onStartCommand(intent, flags, startId)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun start(){
 
         val notification = NotificationCompat.Builder(this, "location")
             .setContentTitle("Tracking location...")
             .setContentText("Location: null")
-            .setSmallIcon(R.drawable.ic_launcher_background)
+//            .setSmallIcon(R.drawable.ic_launcher_background)
             .setOngoing(true)
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

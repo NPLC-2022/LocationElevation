@@ -62,20 +62,20 @@ class SwitchesAndCrystalsActivity : AppCompatActivity() {
             toggleCrystal(switchThree1); toggleCrystal(switchThree2)
         }
 
-        val switchFive1 = 2
-        val switchFive2 = 4
-
-        // Yellow Switch // 3 & 5 ~> 2, 4
-        bind.switchFourButton.setOnClickListener{
-            toggleCrystal(switchFive1); toggleCrystal(switchFive2)
-        }
-
         val switchFour1 = 1
         val switchFour2 = 2
 
-        // Pink Switch // 2, 3 ~> 1, 2
+        // Yellow Switch // 2 & 3 ~> 1 & 2
         bind.switchFourButton.setOnClickListener{
             toggleCrystal(switchFour1); toggleCrystal(switchFour2)
+        }
+
+        val switchFive1 = 2
+        val switchFive2 = 4
+
+        // Pink Switch // 3 & 5 ~> 2, 4
+        bind.switchFiveButton.setOnClickListener{
+            toggleCrystal(switchFive1); toggleCrystal(switchFive2)
         }
 
         // Reset Crystal to Original State
@@ -90,20 +90,7 @@ class SwitchesAndCrystalsActivity : AppCompatActivity() {
     // toggle color function - Int
     fun toggleCrystal(index:Int){
 
-        // R -> G
-        if(crystalStatusArray[index] == colorKeyArray[0]){
-            crystalStatusArray[index] = colorKeyArray[1]
-        }
-        // G -> B
-        if(crystalStatusArray[index] == colorKeyArray[1]){
-            crystalStatusArray[index] = colorKeyArray[2]
-        }
-        // B -> R
-        if(crystalStatusArray[index] == colorKeyArray[2]){
-            crystalStatusArray[index] = colorKeyArray[0]
-        }
-
-        val status = crystalStatusArray[index]
+        var status = crystalStatusArray[index]
         val view = crystalArray[index]
 
         val beforeColor = if(status == 'r') { R.color.red_400 }
@@ -126,6 +113,13 @@ class SwitchesAndCrystalsActivity : AppCompatActivity() {
 
         colorAnimation.addUpdateListener { animator -> view.setBackgroundColor(animator.animatedValue as Int) }
         colorAnimation.start()
+
+        // R -> G
+        if(status == colorKeyArray[0]){ crystalStatusArray[index] = colorKeyArray[1] }
+        // G -> B
+        if(status == colorKeyArray[1]){ crystalStatusArray[index] = colorKeyArray[2] }
+        // B -> R
+        if(status == colorKeyArray[2]){ crystalStatusArray[index] = colorKeyArray[0] }
 
     }
 
