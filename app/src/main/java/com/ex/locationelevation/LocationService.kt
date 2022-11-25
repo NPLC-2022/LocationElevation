@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.media.session.PlaybackState.ACTION_STOP
+import android.os.Build.VERSION_CODES.R
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -66,6 +67,7 @@ class LocationService:Service() {
                 lon = location.longitude
                 alt = location.altitude
                 acc = location.accuracy
+                alt_acc = location.verticalAccuracyMeters
 
                 val lati = location.latitude.toString().takeLast(3)
                 val long = location.longitude.toString().takeLast(3)
@@ -110,6 +112,7 @@ class LocationService:Service() {
         private var lon = 0.0
         private var alt = 0.0
         private var acc = 0F
+        private var alt_acc = 0F
 
 //        var FlowKey = true
 
@@ -142,6 +145,14 @@ class LocationService:Service() {
             while(true){
                 emit(acc); delay(1000)
                 Log.d("Location_Accuracy", "Accuracy: $acc \n" +
+                        " Thread: ${Thread.currentThread().name}")
+            }
+        }
+
+        val latestVerticalAccuracy: Flow<Float> = flow {
+            while(true){
+                emit(alt_acc); delay(1000)
+                Log.d("Location_Alt_Acc", "Alt-Acc: $alt_acc \n" +
                         " Thread: ${Thread.currentThread().name}")
             }
         }

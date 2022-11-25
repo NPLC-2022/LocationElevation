@@ -29,6 +29,7 @@
                 android:id="@+id/switchTwoButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/purple_600"
                 android:text="@string/switch_literally"
                 android:textSize="12sp"
                 app:icon="@drawable/ic_baseline_flash_on_24"
@@ -67,11 +68,25 @@
                 app:layout_constraintTop_toTopOf="@+id/switchTwoButton" />
 
             <Button
+                android:id="@+id/switchFourButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/yellow_500"
+                android:text="@string/switch_literally"
+                app:icon="@drawable/ic_baseline_flash_on_24"
+                app:layout_constraintEnd_toStartOf="@+id/switchFiveButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/greenSwitchTextView" />
+
+            <Button
                 android:id="@+id/crystalOneButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="140dp"
+                android:backgroundTint="@color/indigo_400"
                 android:text="1"
                 app:layout_constraintEnd_toStartOf="@+id/crystalTwoButton"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -84,6 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/indigo_400"
                 android:text="5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -96,6 +112,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="24dp"
+                android:backgroundTint="@color/indigo_400"
                 android:text="4"
                 app:layout_constraintEnd_toStartOf="@+id/crystalFiveButton"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -107,6 +124,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/indigo_400"
                 android:text="3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -117,6 +135,7 @@
                 android:id="@+id/crystalTwoButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/indigo_400"
                 android:text="2"
                 app:layout_constraintEnd_toStartOf="@+id/crystalThreeButton"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -149,7 +168,7 @@
                 android:id="@+id/blueSwitchTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="16dp"
                 android:text="Toggle 4 and 5"
                 app:layout_constraintStart_toStartOf="@+id/switchThreeButton"
@@ -173,10 +192,43 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="80dp"
                 android:layout_marginTop="68dp"
+                android:backgroundTint="@color/red_700"
                 android:text="Reset"
-                android:backgroundTint="@color/red_500"
                 app:layout_constraintStart_toStartOf="@+id/crystalFourButton"
                 app:layout_constraintTop_toBottomOf="@+id/crystalFiveButton" />
+
+            <Button
+                android:id="@+id/switchFiveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/rose_500"
+                android:text="@string/switch_literally"
+                app:icon="@drawable/ic_baseline_flash_on_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/switchFourButton"
+                app:layout_constraintTop_toBottomOf="@+id/purpleSwitchTextView" />
+
+            <TextView
+                android:id="@+id/yellowSwitchTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Toggle 2 and 3"
+                app:layout_constraintStart_toStartOf="@+id/switchFourButton"
+                app:layout_constraintTop_toBottomOf="@+id/switchFourButton" />
+
+            <TextView
+                android:id="@+id/pinkSwitchTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Toggle 3 and 5"
+                app:layout_constraintStart_toStartOf="@+id/switchFiveButton"
+                app:layout_constraintTop_toBottomOf="@+id/switchFiveButton" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -48,11 +48,11 @@ class reimaginedView:AppCompatActivity() {
 
         thisModel.messageToDisplay.observe(this, Observer { bind.DisplayFloorTextView.text = it })
 
-        thisModel.rangeArray.observe(this){
+        thisModel.rangeArray.observe(this, Observer{
             val topRange = it[1].toString()
             val lowRange = it[0].toString()
             bind.currentRangeTextView.text = "$lowRange - $topRange"
-        }
+        })
     }
 
     private fun listeners(){

@@ -129,7 +129,6 @@ class UsingClientProvider : AppCompatActivity() {
 
         if(requestingLocationUpdatesStatus){return }
 
-
 //        locationBeingCalledBack = object : LocationCallback() {
 //            override fun onLocationResult(p0: LocationResult) {
 //                for (location in p0.locations){
@@ -143,6 +142,7 @@ class UsingClientProvider : AppCompatActivity() {
         locationResquesting.interval = 100
         locationResquesting.fastestInterval = 50
         locationResquesting.maxWaitTime = 100
+        locationResquesting.isWaitForAccurateLocation
 
         fusedLocationClient.requestLocationUpdates(
             locationResquesting,
