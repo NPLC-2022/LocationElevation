@@ -5,11 +5,14 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.widget.TextView
+import com.ex.locationelevation.databinding.ActivityBarometerBinding
 
 class SensorActivityManager : Activity(), SensorEventListener {
     private val mSensorManager: SensorManager
     private val mAccelerometer: Sensor
     private val mBarometer: Sensor
+    private lateinit var bind:ActivityBarometerBinding
 
     init {
         mSensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
@@ -29,9 +32,14 @@ class SensorActivityManager : Activity(), SensorEventListener {
     }
 
     fun getAltitudeFromBarometer(){
-
+        
     }
 
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
-    override fun onSensorChanged(event: SensorEvent) {}
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+
+    }
+    override fun onSensorChanged(event: SensorEvent) {
+        val value = event.values
+        bind.BarometerValueTextView.setText(value.size)
+    }
 }

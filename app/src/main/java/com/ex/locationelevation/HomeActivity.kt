@@ -44,6 +44,11 @@ class HomeActivity : AppCompatActivity() {
                 .apply { startActivity(this) }
         }
 
+        bind.goToBarometerActivityButton.setOnClickListener{
+            Intent(this, BarometerActivity::class.java)
+                .apply { startActivity(this) }
+        }
+
 
     }
 

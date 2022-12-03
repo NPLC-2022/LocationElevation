@@ -72,6 +72,15 @@
                 android:text="Scan a QR Code"
                 app:layout_constraintStart_toStartOf="@+id/goToGenerateQRButton"
                 app:layout_constraintTop_toBottomOf="@+id/goToGenerateQRButton" />
+
+            <Button
+                android:id="@+id/goToBarometerActivityButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="barometer"
+                app:layout_constraintStart_toStartOf="@+id/goToSwitchesAndCrystalsButton"
+                app:layout_constraintTop_toBottomOf="@+id/goToSwitchesAndCrystalsButton" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
