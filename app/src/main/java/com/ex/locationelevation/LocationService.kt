@@ -7,11 +7,11 @@ import android.content.Intent
 import android.location.Location
 import android.media.session.PlaybackState.ACTION_STOP
 import android.os.Build
-import android.os.Build.VERSION_CODES.R
 import android.os.IBinder
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -58,7 +58,7 @@ class LocationService:Service() {
         val notification = NotificationCompat.Builder(this, "location")
             .setContentTitle("Tracking location...")
             .setContentText("Location: null")
-//            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setSmallIcon(R.drawable.ic_baseline_flash_on_24)
             .setOngoing(true)
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
