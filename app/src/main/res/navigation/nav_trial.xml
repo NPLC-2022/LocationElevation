@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_trial"
+    app:startDestination="@id/firstFloorPlazaFragment">
+
+    <fragment
+        android:id="@+id/firstFloorPlazaFragment"
+        android:name="com.ex.locationelevation.fragments.firstFloorPlazaFragment"
+        android:label="fragment_first_floor_plaza"
+        tools:layout="@layout/fragment_first_floor_plaza" />
+    <fragment
+        android:id="@+id/secondFloorFragment"
+        android:name="com.ex.locationelevation.fragments.SecondFloorFragment"
+        android:label="fragment_second_floor"
+        tools:layout="@layout/fragment_second_floor" />
+    <fragment
+        android:id="@+id/thirdFloorFragment"
+        android:name="com.ex.locationelevation.fragments.ThirdFloorFragment"
+        android:label="fragment_third_floor"
+        tools:layout="@layout/fragment_third_floor" />
+    <fragment
+        android:id="@+id/fourthFloorFragment"
+        android:name="com.ex.locationelevation.fragments.FourthFloorFragment"
+        android:label="fragment_fourth_floor"
+        tools:layout="@layout/fragment_fourth_floor" />
+    <fragment
+        android:id="@+id/firstFloorCorepreneurFragment"
+        android:name="com.ex.locationelevation.fragments.FirstFloorCorepreneurFragment"
+        android:label="fragment_first_floor_corepreneur"
+        tools:layout="@layout/fragment_first_floor_corepreneur" />
+    <fragment
+        android:id="@+id/fifthFloorFragment"
+        android:name="com.ex.locationelevation.fragments.FifthFloorFragment"
+        android:label="fragment_fifth_floor"
+        tools:layout="@layout/fragment_fifth_floor" />
+    <fragment
+        android:id="@+id/sixthFloorFragment"
+        android:name="com.ex.locationelevation.fragments.sixthFloorFragment"
+        android:label="fragment_sixth_floor"
+        tools:layout="@layout/fragment_sixth_floor" />
+    <fragment
+        android:id="@+id/seventhFloorFragment"
+        android:name="com.ex.locationelevation.fragments.seventhFloorFragment"
+        android:label="fragment_seventh_floor"
+        tools:layout="@layout/fragment_seventh_floor" />
+    <fragment
+        android:id="@+id/seventhFloorMetrodataFragment"
+        android:name="com.ex.locationelevation.fragments.seventhFloorMetrodataFragment"
+        android:label="fragment_seventh_floor_metrodata"
+        tools:layout="@layout/fragment_seventh_floor_metrodata" />
+    <fragment
+        android:id="@+id/seventhFloorAuditorium"
+        android:name="com.ex.locationelevation.fragments.seventhFloorAuditorium"
+        android:label="fragment_seventh_floor_auditorium"
+        tools:layout="@layout/fragment_seventh_floor_auditorium" />
+</navigation>

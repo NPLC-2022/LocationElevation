@@ -49,6 +49,10 @@ class HomeActivity : AppCompatActivity() {
                 .apply { startActivity(this) }
         }
 
+        bind.goToHubActivity.setOnClickListener{
+            Intent(this, NavigationHubActivity::class.java)
+                .apply { startActivity(this) }
+        }
 
     }
 

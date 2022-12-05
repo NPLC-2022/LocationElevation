@@ -7,7 +7,15 @@
     android:layout_height="match_parent"
     tools:context=".reimaginedView">
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <ScrollView
+        android:id="@+id/scrollView3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -48,14 +56,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="74dp"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="75dp"
                 android:text="Floor is displayed here"
                 android:textSize="28sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/StartDummyFlowButton" />
+                app:layout_constraintTop_toBottomOf="@+id/altitudeTextView" />
 
             <Button
                 android:id="@+id/getLocationButton"
@@ -87,15 +95,6 @@
                 app:layout_constraintStart_toStartOf="@+id/getLocationButton"
                 app:layout_constraintTop_toBottomOf="@+id/getLocationButton" />
 
-            <Button
-                android:id="@+id/StartDummyFlowButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="10 Dummy"
-                app:layout_constraintStart_toStartOf="@+id/dummyTextView"
-                app:layout_constraintTop_toBottomOf="@+id/dummyTextView" />
-
             <TextView
                 android:id="@+id/altitudeTextView"
                 android:layout_width="wrap_content"
@@ -125,24 +124,23 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/dummyTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="Dummy Here"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.516"
-                app:layout_constraintStart_toEndOf="@+id/altitudeTextView"
-                app:layout_constraintTop_toBottomOf="@+id/accuracyTextView" />
-
-            <TextView
                 android:id="@+id/accuracyTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="144dp"
+                android:layout_marginEnd="140dp"
                 android:text="Accuracy"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/latitudeTextView" />
+                app:layout_constraintTop_toTopOf="@+id/latitudeTextView" />
+
+            <TextView
+                android:id="@+id/altAccuracyTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="152dp"
+                android:text="Alt-Acc"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/altitudeTextView" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

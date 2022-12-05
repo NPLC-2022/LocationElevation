@@ -71,6 +71,7 @@ class DefaultLocationClient(
             .setFastestInterval(interval)
             .setMaxWaitTime(100)
             .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+            .setWaitForAccurateLocation(true)
 
         return request
     }

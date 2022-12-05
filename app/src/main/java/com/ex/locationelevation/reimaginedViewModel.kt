@@ -25,6 +25,8 @@ class reimaginedViewModel : ViewModel() {
     private val _theAccuracy: MutableLiveData<Float> by lazy { MutableLiveData<Float>() }
     val theAccuracy = _theAccuracy
 
+    private val _theAltAcc: MutableLiveData<Float> by lazy { MutableLiveData<Float>() }
+    val theAltAcc = _theAltAcc
 
 // ===============================================================================================
 // Jobs, Flows and Scopes
@@ -82,27 +84,7 @@ class reimaginedViewModel : ViewModel() {
             .apply { Log.d("LONGITUDE_FLOW_STOPPED", "Longitude Flow is canceled") }
     }
 
-    private lateinit var _altitudeFlow: Flow<Double>
-    private lateinit var _altitudeJob: Job
-    private suspend fun collectAltitudeJob() {
-        _altitudeFlow = LocationService.latestAltitude.cancellable().conflate()
-        _altitudeFlow.collectLatest{ _theAltitude.postValue(it) }
 
-    }
-
-    fun startAltitudeFlow() {
-        _altitudeJob = viewModelScope.launch(Dispatchers.IO) { collectAltitudeJob() }
-        _altitudeJob.start()
-            .apply { Log.d("ALTITUDE_FLOW_STARTED", "Altitude Flow is starting") }
-    }
-    fun cancelAltitudeFlow() {
-        if(!::_altitudeJob.isInitialized) {
-            Log.d("ALTITUDE_FLOW_FAILED", "Altitude failed to STOP")
-            return
-        }
-        _altitudeJob.cancel()
-        .apply { Log.d("ALTITUDE_FLOW_STOPPED", "Altitude Flow is canceled") }
-    }
 
     private lateinit var _accuracyFlow: Flow<Float>
     private lateinit var _accuracyJob: Job
@@ -126,6 +108,51 @@ class reimaginedViewModel : ViewModel() {
             .apply { Log.d("ACCURACY_FLOW_STOPPED", "Accuracy Flow is canceled") }
     }
 
+    private lateinit var _altitudeFlow: Flow<Double>
+    private lateinit var _altitudeJob: Job
+    private suspend fun collectAltitudeJob() {
+        _altitudeFlow = LocationService.latestAltitude.cancellable().conflate()
+        _altitudeFlow.collectLatest{ _theAltitude.postValue(it) }
+
+    }
+    fun startAltitudeFlow() {
+        _altitudeJob = viewModelScope.launch(Dispatchers.IO) { collectAltitudeJob() }
+        _altitudeJob.start()
+            .apply { Log.d("ALTITUDE_FLOW_STARTED", "Altitude Flow is starting") }
+    }
+    fun cancelAltitudeFlow() {
+        if(!::_altitudeJob.isInitialized) {
+            Log.d("ALTITUDE_FLOW_FAILED", "Altitude failed to STOP")
+            return
+        }
+        _altitudeJob.cancel()
+        .apply { Log.d("ALTITUDE_FLOW_STOPPED", "Altitude Flow is canceled") }
+    }
+
+    private lateinit var _altAccFlow: Flow<Float>
+    private lateinit var _altAccJob: Job
+    private suspend fun collectAltAccJob() {
+        _altAccFlow = LocationService.latestVerticalAccuracy.cancellable().conflate()
+        _altAccFlow.collectLatest{ _theAltAcc.postValue(it) }
+
+    }
+    fun startAltAccFlow() {
+        _altAccJob = viewModelScope.launch(Dispatchers.IO) { collectAltAccJob() }
+        _altAccJob.start()
+            .apply { Log.d("ALTITUDE_FLOW_STARTED", "AltAcc Flow is starting") }
+    }
+    fun cancelAltAccFlow() {
+        if(!::_altAccJob.isInitialized) {
+            Log.d("ALTITUDE_FLOW_FAILED", "AltAcc failed to STOP")
+            return
+        }
+        _altAccJob.cancel()
+            .apply { Log.d("ALTITUDE_FLOW_STOPPED", "AltAcc Flow is canceled") }
+    }
+
+
+
+
 
 // ===============================================================================================
 // Data
@@ -139,8 +166,20 @@ class reimaginedViewModel : ViewModel() {
             in 77.20..79.60 -> doubleArrayOf(77.2, 79.6)
             in 76.01..77.19 -> doubleArrayOf(76.01, 77.19)
             in 72.90..76.00 -> doubleArrayOf(72.9, 76.0)
-            in 60.01..72.80 -> doubleArrayOf(60.01, 72.8)
-            in 54.00..64.00 -> doubleArrayOf(54.00, 64.00)
+            // 2 - 4 floor
+//            in 60.01..72.80 -> doubleArrayOf(60.01, 72.8)
+
+
+            // 4th floor Experimental
+            in 68.0..69.5 -> doubleArrayOf(68.0, 69.5)
+            // 3rd floor Experimental
+            in 65.0..65.5 -> doubleArrayOf(65.0, 65.5)
+            // 2nd floor Experimental
+            in 57.8..61.4 -> doubleArrayOf(57.8, 61.4)
+
+
+            in 54.00..57.8 -> doubleArrayOf(54.00, 57.8)
+//            in 54.00..64.00 -> doubleArrayOf(54.00, 64.00)
             else -> doubleArrayOf(10.01, 40.00)
         }
     }
@@ -153,7 +192,7 @@ class reimaginedViewModel : ViewModel() {
 //        var certainLatitude = theLatitude.value!!.let { it }
 //        val certainLongitude = theLongitude.value!!.let { it }
             when (it) {
-                in 90.01..100.00 -> "c u in hevannaa"
+                in 90.01..200.00 -> "c u in hevannaa"
                 in 80.00..90.00 ->
                     if(theLatitude.value != null && theLongitude.value != null) {
                           if (theLatitude.value.toString().toDouble() in -7.2859..-7.2853 &&
@@ -166,16 +205,26 @@ class reimaginedViewModel : ViewModel() {
                 in 77.20..79.60 -> "6th floor"
                 in 76.01..77.19 -> "5 - 6 floor"
                 in 72.90..76.00 -> "5th floor"
-                in 60.01..72.80 -> "2 - 4 floor"
-                in 54.00..64.00 ->
+
+
+//                in 60.01..72.80 -> "2 - 4 floor"
+                in 68.0..69.5 -> "4th floor"
+                in 65.0..65.5 -> "3rd floor"
+                in 57.8..61.4 -> "2nd floor"
+
+
+                in 54.00..57.8 ->
                     if(theLatitude.value != null && theLongitude.value != null) {
                         if (theLatitude.value.toString().toDouble() in -7.2862..-7.2857 &&
                             theLongitude.value.toString().toDouble() in 112.6319..112.6322) {"Corepreneur"}
                         else "1st floor"
                     } else { "1stFloor" }
+                // 1st floor past
+                //  in 54.00..64.00 -> "1st floor"
                 else -> "r y andegrawun? \nI hef gud inggres"
             }
 //        }
+
     }
 
     fun checkActivityForLocationPermission(activity: Activity){

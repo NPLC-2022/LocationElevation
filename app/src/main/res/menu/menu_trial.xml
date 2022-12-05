@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/firstFloorPlazaFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_baseline_flash_on_24"
+        android:title="plaza" />
+    <item
+        android:id="@+id/firstFloorCorepreneurFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_baseline_flash_on_24"
+        android:title="corepreneur" />
+    <item
+        android:id="@+id/secondFloorFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_baseline_flash_on_24"
+        android:title="2nd" />
+    <item
+        android:id="@+id/thirdFloorFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_baseline_flash_on_24"
+        android:title="3rd" />
+    <item
+        android:id="@+id/fourthFloorFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_baseline_flash_on_24"
+        android:title="4th" />
+    <item
+
+        android:id="@+id/fifthFloorFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_baseline_flash_on_24"
+        android:title="5th" />
+    <item
+        android:id="@+id/sixthFloorFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_baseline_flash_on_24"
+        android:title="6th" />
+    <item
+        android:id="@+id/seventhFloorFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_baseline_flash_on_24"
+        android:title="7th" />
+    <item
+
+        android:id="@+id/seventhFloorAuditorium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_baseline_flash_on_24"
+        android:title="Auditorium" />
+    <item
+
+        android:id="@+id/seventhFloorMetrodataFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_baseline_flash_on_24"
+        android:title="Metrodata" />
+</menu>

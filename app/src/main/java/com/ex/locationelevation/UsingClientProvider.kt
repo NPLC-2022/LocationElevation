@@ -142,7 +142,7 @@ class UsingClientProvider : AppCompatActivity() {
         locationResquesting.interval = 100
         locationResquesting.fastestInterval = 50
         locationResquesting.maxWaitTime = 100
-        locationResquesting.isWaitForAccurateLocation
+        locationResquesting.isWaitForAccurateLocation = true
 
         fusedLocationClient.requestLocationUpdates(
             locationResquesting,

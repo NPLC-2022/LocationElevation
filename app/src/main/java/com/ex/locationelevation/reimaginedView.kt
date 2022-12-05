@@ -40,11 +40,13 @@ class reimaginedView:AppCompatActivity() {
         thisModel.theLatitude.observe(this, Observer {
             bind.latitudeTextView.text = it.toString()
         })
-
         thisModel.theLongitude.observe(this, Observer { bind.longitudeTextView.text = it.toString() })
+        thisModel.theAccuracy.observe(this, Observer {bind.accuracyTextView.text = it.toString() })
 
 //        thisModel.theAltitude.observe(this) { bind.altitudeTextView.text = it.toString() }
         thisModel.theAltitude.observe(this, Observer { bind.altitudeTextView.text = it.toString() })
+
+        thisModel.theAltAcc.observe(this, Observer {bind.altAccuracyTextView.text = it.toString() })
 
         thisModel.messageToDisplay.observe(this, Observer { bind.DisplayFloorTextView.text = it })
 
@@ -53,6 +55,7 @@ class reimaginedView:AppCompatActivity() {
             val lowRange = it[0].toString()
             bind.currentRangeTextView.text = "$lowRange - $topRange"
         })
+
     }
 
     private fun listeners(){
@@ -63,35 +66,17 @@ class reimaginedView:AppCompatActivity() {
 //            }
 //        }
 
-        bind.StartDummyFlowButton.setOnClickListener{
-            thisModel.dummyDataStateFlow()
-
-            lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    thisModel.theDummyState.collectLatest { number ->
-                        bind.dummyTextView.text = number.toString()
-                    }
-                }
-            }
-
-        }
-
         bind.getLocationButton.setOnClickListener{
             Intent(applicationContext, LocationService::class.java).apply{
                 action = LocationService.ACTION_START
                 startService(this)
             }
 
-//            if(!thisModel.startLatitudeFlow().isActive){thisModel.startLatitudeFlow()}
-//            if(!thisModel.startLongitudeFlow().isActive){thisModel.startLongitudeFlow()}
-//            if(!thisModel.startAltitudeFlow().isActive){thisModel.startAltitudeFlow()}
-
             thisModel.startLatitudeFlow()
             thisModel.startLongitudeFlow()
+            thisModel.startAccuracyFlow()
             thisModel.startAltitudeFlow()
-//            FlowKey = true
-//            Log.d("FLOW_KEY_TRUE", "Setting Flow key to True")
-
+            thisModel.startAltAccFlow()
 
         }
 
@@ -106,7 +91,9 @@ class reimaginedView:AppCompatActivity() {
 //            if(thisModel.startAltitudeFlow().isActive){thisModel.cancelAltitudeFlow()}
             thisModel.cancelLatitudeFlow()
             thisModel.cancelLongitudeFlow()
+            thisModel.cancelAccuracyFlow()
             thisModel.cancelAltitudeFlow()
+            thisModel.cancelAltAccFlow()
 //            FlowKey = false
 //            Log.d("FLOW_KEY_FALSE", "Setting Flow key to false")
 
