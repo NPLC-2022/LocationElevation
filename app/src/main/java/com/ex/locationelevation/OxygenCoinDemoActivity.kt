@@ -59,10 +59,9 @@ class OxygenCoinDemoActivity : AppCompatActivity() {
             progressIsThisColor(ContextCompat.getColor(baseContext, R.color.teal_200))
             if(currentProgress>0){ currentProgress -= 20; animateChange(); }
             else {
-                Toast.makeText(this@OxygenCoinDemoActivity, "Ur Dead X_X", Toast.LENGTH_SHORT).show()
+                createDeathMessage()
                 cancel()
             }
-
         }
     }
 
@@ -97,6 +96,8 @@ class OxygenCoinDemoActivity : AppCompatActivity() {
 
     fun progressIsThisColor(color: Int){ oxygenBar.progressTintList = ColorStateList.valueOf(color) }
 
-
+    fun createDeathMessage(){
+        Toast.makeText(this@OxygenCoinDemoActivity, "Ur Dead X_X", Toast.LENGTH_SHORT).show()
+    }
 
 }
